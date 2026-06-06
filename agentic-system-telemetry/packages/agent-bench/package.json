@@ -1,0 +1,21 @@
+{
+  "name": "@agent-lens/agent-bench",
+  "version": "0.1.0",
+  "description": "CLI runner for agentic-system telemetry benchmarks.",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "agent-bench": "./dist/cli/index.js"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "npm run build && node --test dist/tests/unit/*.test.js"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "typescript": "^5.7.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

@@ -1,0 +1,10 @@
+AgentLens notices
+
+TokenTelemetry
+--------------
+This project documents TokenTelemetry as prior art and reserves an adapter
+boundary for compatible parser/log-location reuse. No TokenTelemetry source
+code is copied, modified, or vendored in this initial implementation.
+
+If TokenTelemetry code is copied or modified later, preserve its MIT license
+notice here and in the relevant source files.
