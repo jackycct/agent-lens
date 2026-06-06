@@ -115,3 +115,36 @@ make lint
 ```
 
 If `make` is unavailable on Windows, use the equivalent project commands documented in `README.md`.
+
+## Agent Execution Contract
+
+This project exposes a stable command interface through `make`.
+
+Required local prerequisites:
+
+- `choco`
+- `make`
+- `npm`
+
+Recommended setup flow:
+
+```sh
+make doctor
+make install
+make verify
+```
+
+Cleanup:
+
+```sh
+make clean
+```
+
+The cleanup step removes:
+
+```text
+runs/
+dist/
+```
+
+Agents should prefer `make` targets over manually invoking lower-level commands.
