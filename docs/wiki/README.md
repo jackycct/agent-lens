@@ -9,7 +9,7 @@ coding agents.
 - [Contributor Setup](contributor-setup.md)
 - [Contribution Workflow](contribution-workflow.md)
 - [Skill Packaging](skill-packaging.md)
-- [Reports And Jira](reports-and-jira.md)
+- [Reports](reports.md)
 - [Troubleshooting](troubleshooting.md)
 
 ## Command Contract
