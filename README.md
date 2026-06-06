@@ -9,6 +9,11 @@ This repository currently contains the first open-source foundation:
 - `agentic-system-telemetry/skills/agentic-system-telemetry/SKILL.md`
 - `agentic-system-telemetry/packages/agent-bench`
 
+## Contributor Wiki
+
+Contributor setup, workflow, skill packaging, report/Jira usage, and
+troubleshooting are documented in `docs/wiki/README.md`.
+
 ## Install
 
 ```bash

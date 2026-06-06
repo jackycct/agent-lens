@@ -1,12 +1,14 @@
 ifeq ($(OS),Windows_NT)
   SHELL := C:/Progra~1/Git/bin/bash.exe
+  NPM := npm.cmd
 else
   SHELL := /bin/bash
+  NPM := npm
 endif
 
 .DEFAULT_GOAL := help
 
-.PHONY: help doctor dev-tools install build test verify clean reset
+.PHONY: help doctor dev-tools install build test skill-verify verify clean reset
 
 help: ## Show available commands
 	@grep -E '^[a-zA-Z_-]+:.*?## ' $(MAKEFILE_LIST) | \
@@ -57,20 +59,25 @@ dev-tools: ## Check and install optional development tools (gh, acli, codex, agy
 
 install: doctor ## Install project dependencies
 	@echo "Installing project dependencies..."
-	npm install --prefix agentic-system-telemetry/packages/agent-bench
+	cd agentic-system-telemetry/packages/agent-bench && $(NPM) install
 	@echo "Install complete."
 
 build: install ## Build project artifacts
 	@echo "Building project..."
-	npm run build --prefix agentic-system-telemetry/packages/agent-bench --if-present
+	cd agentic-system-telemetry/packages/agent-bench && $(NPM) run build --if-present
 	@echo "Build complete."
 
 test: install ## Run project tests
 	@echo "Running tests..."
-	npm test --prefix agentic-system-telemetry/packages/agent-bench --if-present
+	cd agentic-system-telemetry/packages/agent-bench && $(NPM) test --if-present
 	@echo "Test step complete."
 
-verify: doctor install build test ## Run full verification workflow
+skill-verify: ## Validate packaged skills
+	@echo "Validating skill packages..."
+	powershell.exe -NoProfile -ExecutionPolicy Bypass -File tools/verify-skills.ps1
+	@echo "Skill validation complete."
+
+verify: doctor install build test skill-verify ## Run full verification workflow
 	@echo "Verification complete."
 
 clean: ## Remove generated output

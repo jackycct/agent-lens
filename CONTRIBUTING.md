@@ -4,6 +4,9 @@ Thank you for contributing to this project.
 
 This repository is designed to be friendly to both humans and coding agents. Prefer the documented commands below instead of ad hoc setup steps.
 
+For task-focused contributor guidance, see the contribution wiki at
+`docs/wiki/README.md`.
+
 ## Optional contributor tools
 
 These tools are optional, but recommended if you work with GitHub issues, pull requests, or Jira tickets from the command line.
@@ -168,8 +171,7 @@ agy --version
 Before opening a pull request, run the project validation commands:
 
 ```powershell
-make test
-make lint
+make verify
 ```
 
 If `make` is unavailable on Windows, use the equivalent project commands documented in `README.md`.
@@ -190,6 +192,13 @@ Recommended setup flow:
 make doctor
 make install
 make verify
+```
+
+Skill packaging validation is included in `make verify` and can also be run
+directly:
+
+```powershell
+make skill-verify
 ```
 
 Cleanup:

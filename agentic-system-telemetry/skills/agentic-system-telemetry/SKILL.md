@@ -115,6 +115,13 @@ Reuse TokenTelemetry responsibly:
 - Add `NOTICE` or `THIRD_PARTY_LICENSES` entries if any code is copied,
   modified, or vendored.
 
+## Packaging
+
+This skill is packaged under
+`agentic-system-telemetry/skills/agentic-system-telemetry/SKILL.md`.
+Before release, run `make skill-verify` from the repository root and follow
+`docs/wiki/skill-packaging.md`.
+
 ## Report Sections
 
 Generated reports should include:
