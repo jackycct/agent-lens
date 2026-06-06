@@ -40,6 +40,15 @@ agent-bench compare \
 agent-bench report --summary runs/2026-06-06/<run_id>/summary.json
 ```
 
+Reports can be attached to pull requests, Jira tickets, engineering reviews,
+and experiment logs. See `../docs/wiki/reports-and-jira.md`.
+
+## Skill Packaging
+
+The packaged skill lives at `skills/agentic-system-telemetry/SKILL.md`.
+Packaging requirements and validation steps are documented in
+`../docs/wiki/skill-packaging.md`.
+
 ## Methodology
 
 Measure the whole agentic system, not just the model:

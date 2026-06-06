@@ -1,15 +1,16 @@
 # AgentLens Contribution Wiki
 
 This wiki is the contributor entrypoint for AgentLens. It complements
-`README.md` with task-focused guidance for humans and coding agents.
+`README.md` and `CONTRIBUTING.md` with task-focused guidance for humans and
+coding agents.
 
 ## Pages
 
-- [Contributor Setup](docs/wiki/contributor-setup.md)
-- [Contribution Workflow](docs/wiki/contribution-workflow.md)
-- [Skill Packaging](docs/wiki/skill-packaging.md)
-- [Reports And Jira](docs/wiki/reports-and-jira.md)
-- [Troubleshooting](docs/wiki/troubleshooting.md)
+- [Contributor Setup](contributor-setup.md)
+- [Contribution Workflow](contribution-workflow.md)
+- [Skill Packaging](skill-packaging.md)
+- [Reports](reports.md)
+- [Troubleshooting](troubleshooting.md)
 
 ## Command Contract
 
