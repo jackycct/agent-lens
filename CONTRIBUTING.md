@@ -8,10 +8,12 @@ This repository is designed to be friendly to both humans and coding agents. Pre
 
 These tools are optional, but recommended if you work with GitHub issues, pull requests, or Jira tickets from the command line.
 
-| Tool                 | Purpose                                                                   | Required |
-| -------------------- | ------------------------------------------------------------------------- | -------- |
-| GitHub CLI `gh`      | Work with GitHub issues, pull requests, authentication, and repo metadata | Optional |
-| Atlassian CLI `acli` | Work with Jira and Atlassian Cloud from the command line                  | Optional |
+| Tool                 | Command | Purpose                                                                   | Required |
+| -------------------- | ------- | ------------------------------------------------------------------------- | -------- |
+| GitHub CLI           | `gh`    | Work with GitHub issues, pull requests, authentication, and repo metadata | Optional |
+| Atlassian CLI        | `acli`  | Work with Jira and Atlassian Cloud from the command line                  | Optional |
+| Codex CLI            | `codex` | OpenAI coding agent                                                       | Optional |
+| Antigravity CLI      | `agy`   | Google terminal coding agent                                              | Optional |
 
 ## Agent-executable setup
 
@@ -88,11 +90,66 @@ After installation, authenticate manually using the command required by your Atl
 
 Agents should not store API tokens, passwords, or credentials in the repository.
 
+## Optional: Google Antigravity CLI (`agy`)
+
+Google Antigravity CLI is an optional terminal-based coding agent. It can inspect the project, propose edits, and run commands with user approval.
+
+### Check installation
+
+```bash
+agy --version
+```
+
+### Install
+
+Run the standard development tools installer target:
+
+```bash
+make dev-tools
+```
+
+Or install manually:
+
+macOS / Linux:
+
+```bash
+curl -fsSL https://antigravity.google/cli/install.sh | bash
+```
+
+Windows PowerShell:
+
+```powershell
+irm https://antigravity.google/cli/install.ps1 | iex
+```
+
+Windows CMD:
+
+```cmd
+curl -fsSL https://antigravity.google/cli/install.cmd -o install.cmd && install.cmd && del install.cmd
+```
+
+### First run
+
+```bash
+agy
+```
+
+Start AGY from the repository root:
+
+```bash
+cd <repo>
+agy
+```
+
+Before approving file edits or command execution, review proposed actions carefully.
+
+Do not approve commands that expose secrets, upload files, modify credentials, delete unrelated files, bypass project security controls, or perform unreviewed network operations.
+
 ## Rules for agents
 
 When setting up optional tools:
 
-1. Prefer `scripts/bootstrap-tools.ps1`.
+1. Prefer `make dev-tools`.
 2. Do not click GUI download buttons.
 3. Do not commit downloaded binaries.
 4. Do not commit credentials, tokens, or generated auth files.
@@ -103,6 +160,7 @@ When setting up optional tools:
 ```powershell
 gh --version
 acli --version
+agy --version
 ```
 
 ## Validation before submitting changes
