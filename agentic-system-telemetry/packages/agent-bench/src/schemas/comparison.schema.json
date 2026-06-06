@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agent-lens.local/schemas/comparison.schema.json",
+  "title": "AgentLens Comparison Summary",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "baseline",
+    "candidate",
+    "wall_ms_delta",
+    "wall_ms_delta_percent",
+    "total_tokens_delta",
+    "total_tokens_delta_percent",
+    "tool_call_count_delta",
+    "diff_lines_delta",
+    "tests",
+    "success",
+    "recommendation"
+  ],
+  "properties": {
+    "baseline": { "type": "string" },
+    "candidate": { "type": "string" },
+    "wall_ms_delta": { "type": ["integer", "null"] },
+    "wall_ms_delta_percent": { "type": ["number", "null"] },
+    "total_tokens_delta": { "type": ["integer", "null"] },
+    "total_tokens_delta_percent": { "type": ["number", "null"] },
+    "tool_call_count_delta": { "type": ["integer", "null"] },
+    "diff_lines_delta": { "type": "integer" },
+    "tests": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["baseline_passed", "candidate_passed"],
+      "properties": {
+        "baseline_passed": { "type": ["boolean", "null"] },
+        "candidate_passed": { "type": ["boolean", "null"] }
+      }
+    },
+    "success": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["baseline", "candidate"],
+      "properties": {
+        "baseline": { "type": "boolean" },
+        "candidate": { "type": "boolean" }
+      }
+    },
+    "recommendation": { "type": "string" }
+  }
+}
