@@ -27,35 +27,45 @@ doctor: ## Check required local prerequisites
 dev-tools: ## Check and install optional development tools (gh, acli, codex, agy)
 	@echo "Checking optional agent CLIs..."
 	@if command -v gh >/dev/null 2>&1; then \
-		echo "✅ GitHub CLI detected:"; \
+		echo "GitHub CLI detected:"; \
 		gh --version | head -n 1 || true; \
 	else \
-		echo "⚠️  GitHub CLI not found."; \
+		echo "GitHub CLI not found. Installing GitHub CLI..."; \
+		if [ "$(OS)" = "Windows_NT" ]; then \
+			winget install --id GitHub.cli --source winget --accept-source-agreements --accept-package-agreements || true; \
+		else \
+			echo "Install GitHub CLI: https://cli.github.com/"; \
+		fi; \
 	fi
 	@if command -v acli >/dev/null 2>&1; then \
-		echo "✅ Atlassian CLI detected:"; \
+		echo "Atlassian CLI detected:"; \
 		acli --version || true; \
 	else \
-		echo "⚠️  Atlassian CLI not found."; \
+		echo "Atlassian CLI not found. Installing Atlassian CLI..."; \
+		if [ "$(OS)" = "Windows_NT" ]; then \
+			powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "New-Item -ItemType Directory -Force -Path \"$$env:LOCALAPPDATA\\Programs\\acli\" | Out-Null; if ([System.Runtime.InteropServices.RuntimeInformation]::ProcessArchitecture -eq 'Arm64') { $$uri='https://acli.atlassian.com/windows/latest/acli_windows_arm64/acli.exe' } else { $$uri='https://acli.atlassian.com/windows/latest/acli_windows_amd64/acli.exe' }; Invoke-WebRequest -Uri $$uri -OutFile \"$$env:LOCALAPPDATA\\Programs\\acli\\acli.exe\"" || true; \
+		else \
+			echo "Install Atlassian CLI: https://developer.atlassian.com/cloud/acli/"; \
+		fi; \
 	fi
 	@if command -v codex >/dev/null 2>&1; then \
-		echo "✅ Codex CLI detected:"; \
+		echo "Codex CLI detected:"; \
 		codex --version || true; \
 	else \
-		echo "⚠️  Codex CLI not found."; \
+		echo "Codex CLI not found. Installing Codex CLI..."; \
+		$(NPM) install -g @openai/codex || true; \
 	fi
 	@if command -v agy >/dev/null 2>&1; then \
-		echo "✅ Antigravity CLI detected:"; \
+		echo "Antigravity CLI detected:"; \
 		agy --version || true; \
 	else \
-		echo "⚠️  Antigravity CLI not found. Installing Antigravity CLI..."; \
+		echo "Antigravity CLI not found. Installing Antigravity CLI..."; \
 		if [ "$(OS)" = "Windows_NT" ]; then \
 			powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "irm https://antigravity.google/cli/install.ps1 | iex" || true; \
 		else \
 			curl -fsSL https://antigravity.google/cli/install.sh | bash || true; \
 		fi; \
 	fi
-
 
 install: doctor ## Install project dependencies
 	@echo "Installing project dependencies..."
