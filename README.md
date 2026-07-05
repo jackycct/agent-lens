@@ -187,8 +187,8 @@ apm install
 Generated agent folders are install output derived from `.apm/`; commit source
 package files under `.apm/`, `apm.yml`, and `apm.lock.yaml`, but do not commit
 local generated installs, run artifacts, `dist/`, or `node_modules/`. The root
-`apm.yml` uses `includes: auto` and explicit empty dependency lists until
-extracted APM dependency packages are added.
+`apm.yml` declares deterministic targets, explicit `.apm/` includes, and empty
+dependency lists until extracted APM dependency packages are added.
 
 ## Adding Agent Adapters
 

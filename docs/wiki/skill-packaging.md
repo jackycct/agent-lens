@@ -81,8 +81,8 @@ make verify
 
 - Skill directory name matches frontmatter `name`.
 - `description` is concise and action-oriented.
-- `apm.yml` uses `includes: auto` so `.apm/` instructions and skills are
-  discovered from the producer package.
+- `apm.yml` declares deterministic targets and explicit `.apm/` includes so
+  instructions and skills are discovered consistently from the producer package.
 - `apm.yml` declares only real local package dependencies under
   `dependencies.apm`; leave it empty when the repo has no extracted dependency
   packages.
