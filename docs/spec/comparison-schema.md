@@ -48,8 +48,8 @@ Each variant row includes:
 - `diff_lines`
 - `features`
 
-`features` preserves Avionics and other upstream state so comparison readers can
-see which capabilities differed between variants.
+`features` preserves optional tool, orchestration, and upstream state so
+comparison readers can see which capabilities differed between variants.
 
 ## Recommendation Semantics
 

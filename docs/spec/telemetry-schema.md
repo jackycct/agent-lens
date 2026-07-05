@@ -14,14 +14,14 @@ metadata with this shape:
 
 ```json
 {
-  "run_id": "issue-123_variant-codebrain-plus-stenography_001",
-  "experiment_id": "codebrain_stenography_ab",
-  "variant": "codebrain_plus_stenography",
+  "run_id": "issue-123_variant-repo-context_001",
+  "experiment_id": "repo_context_ab",
+  "variant": "repo_context",
   "repo_sha": "abc123",
   "features": {
-    "avionics_orchestrated": true,
-    "codebrain_symbol_query": true,
-    "stenography_context_pack": true,
+    "orchestrated": true,
+    "repo_intelligence": true,
+    "context_pack": true,
     "agent_lens_telemetry": true
   },
   "eval": {
@@ -55,9 +55,9 @@ Optional fields:
 
 ## First-Class Experiment State
 
-`experiment_id`, `variant`, and `features` are first-class metadata. Avionics
-or another orchestrator should encode workflow state in `features` instead of
-requiring AgentLens to query orchestrator internals.
+`experiment_id`, `variant`, and `features` are first-class metadata. Optional
+tools or orchestrators should encode workflow state in `features` instead of
+requiring AgentLens to query upstream internals.
 
 Feature values may be boolean, string, number, or `null`.
 

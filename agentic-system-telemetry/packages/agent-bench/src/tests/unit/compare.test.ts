@@ -11,7 +11,7 @@ const baseSummary: RunSummary = {
   model: "gpt-x",
   scenario: "edit",
   variant: "baseline",
-  features: { codebrain_symbol_query: false },
+  features: { repo_intelligence: false },
   eval: { type: "pytest", command: "pytest tests/" },
   repo_path: ".",
   commit_sha: "abc",

@@ -21,6 +21,8 @@ troubleshooting are documented in `docs/wiki/README.md`.
 - `AGENTS.md`: coding-agent entrypoint and validation guidance.
 - `docs/architecture.md`: AgentLens boundaries, runtime flow, and adapter model.
 - `docs/design/adapter-boundary.md`: adapter responsibilities and exclusions.
+- `docs/benchmarks/portfolio.md`: benchmark track strategy and shared scenario
+  metadata.
 - `docs/metrics/taxonomy.md`: speed, token, cost, tool, diff, eval, and review
   metric definitions.
 - `docs/spec/telemetry-schema.md`: external metadata and telemetry input
@@ -133,19 +135,19 @@ engineering review, or experiment logs.
 
 ## Record External Experiment Evidence
 
-Avionics or another orchestrator can pass run metadata and telemetry JSONL
-without AgentLens depending on that orchestrator:
+An adapter, tool, or external orchestrator can pass run metadata and telemetry
+JSONL without AgentLens depending on that upstream system:
 
 ```json
 {
-  "run_id": "issue-123_variant-codebrain-plus-stenography_001",
-  "experiment_id": "codebrain_stenography_ab",
-  "variant": "codebrain_plus_stenography",
+  "run_id": "issue-123_variant-repo-context_001",
+  "experiment_id": "repo_context_ab",
+  "variant": "repo_context",
   "repo_sha": "abc123",
   "features": {
-    "codebrain_symbol_query": true,
-    "codebrain_impact_analysis": true,
-    "stenography_context_pack": true,
+    "repo_intelligence": true,
+    "impact_analysis": true,
+    "context_pack": true,
     "agent_lens_telemetry": true
   },
   "eval": {

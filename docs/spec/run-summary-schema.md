@@ -25,18 +25,18 @@ Every summary includes:
 
 - `experiment_id`: names the experiment family.
 - `variant`: names the candidate or baseline under comparison.
-- `features`: records feature state from Avionics or other systems.
+- `features`: records optional tool, orchestration, and upstream feature state.
 
 Example:
 
 ```json
 {
-  "experiment_id": "avionics_ab_context_strategy",
-  "variant": "codebrain_plus_stenography",
+  "experiment_id": "repo_context_ab",
+  "variant": "repo_context",
   "features": {
-    "avionics_orchestrated": true,
-    "codebrain_symbol_query": true,
-    "stenography_context_pack": true,
+    "orchestrated": true,
+    "repo_intelligence": true,
+    "context_pack": true,
     "agent_lens_telemetry": true
   }
 }

@@ -11,7 +11,7 @@ adopted, rejected, or investigated.
 ## Protocol
 
 1. Capture at least one baseline run and one variant run.
-2. Run `agent-bench compare runs/baseline runs/codebrain_plus_stenography`.
+2. Run `agent-bench compare runs/baseline runs/repo_context`.
 3. Review `comparison.json` and `comparison.md`.
 4. Check success rate, elapsed time, tokens, cost, tool calls, eval status,
    diff size, and feature toggles.
