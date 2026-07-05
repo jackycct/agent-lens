@@ -5,7 +5,8 @@
   "license": "MIT",
   "type": "module",
   "bin": {
-    "agent-bench": "./dist/cli/index.js"
+    "agent-bench": "./dist/cli/index.js",
+    "agent-lens": "./dist/cli/index.js"
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",

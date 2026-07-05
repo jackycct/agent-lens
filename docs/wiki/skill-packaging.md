@@ -4,7 +4,12 @@ AgentLens skills live under:
 
 ```text
 agentic-system-telemetry/skills/<skill-name>/SKILL.md
+.apm/skills/<skill-name>/SKILL.md
 ```
+
+The `.apm/` tree is the APM-first producer package. Generated agent folders are
+install output created from `.apm/`; they should not be edited as the source of
+truth.
 
 ## Required Files
 
@@ -40,8 +45,31 @@ Run:
 make skill-verify
 ```
 
-The verifier checks that each skill has valid frontmatter, required fields,
-and a directory name that matches `name`.
+The verifier checks package skills in both `agentic-system-telemetry/skills/`
+and `.apm/skills/` for valid frontmatter, required fields, and a directory name
+that matches `name`.
+
+Validate the APM package before release:
+
+```bash
+apm install
+make skill-verify
+```
+
+Commit:
+
+- `.apm/instructions/`
+- `.apm/skills/`
+- `apm.yml`
+- `apm.lock.yaml`
+
+Do not commit:
+
+- generated user-level agent folders
+- `runs/`
+- `dist/`
+- `node_modules/`
+- local authentication or machine-specific config
 
 Run the full project gate before release:
 
@@ -53,6 +81,12 @@ make verify
 
 - Skill directory name matches frontmatter `name`.
 - `description` is concise and action-oriented.
+- `apm.yml` uses `includes: auto` so `.apm/` instructions and skills are
+  discovered from the producer package.
+- `apm.yml` declares only real local package dependencies under
+  `dependencies.apm`; leave it empty when the repo has no extracted dependency
+  packages.
+- `apm.lock.yaml` is updated when package contents change.
 - Examples use repo-supported commands.
 - Validation passes on Windows from the repo root.
 - `README.md` or package docs link to the skill when user-facing behavior changes.

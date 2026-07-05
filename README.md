@@ -7,6 +7,8 @@ tests, and outcome evidence.
 This repository currently contains the first open-source foundation:
 
 - `agentic-system-telemetry/skills/agentic-system-telemetry/SKILL.md`
+- `.apm/skills/agent-lens-telemetry/SKILL.md`
+- `.apm/skills/agent-lens-benchmark/SKILL.md`
 - `agentic-system-telemetry/packages/agent-bench`
 
 ## Contributor Wiki
@@ -99,6 +101,12 @@ agent-bench compare \
   --candidate runs/2026-06-06/candidate/summary.json
 ```
 
+Directory inputs are also supported:
+
+```bash
+agent-bench compare runs/2026-06-06/baseline runs/2026-06-06/candidate
+```
+
 This creates `comparison.json` and `comparison.md` next to the candidate
 summary unless `--out-dir` is supplied.
 
@@ -110,6 +118,63 @@ agent-bench report --summary runs/2026-06-06/<run_id>/summary.json
 
 The Markdown report is suitable for pull request comments, Jira tickets,
 engineering review, or experiment logs.
+
+## Record External Experiment Evidence
+
+Avionics or another orchestrator can pass run metadata and telemetry JSONL
+without AgentLens depending on that orchestrator:
+
+```json
+{
+  "run_id": "issue-123_variant-codebrain-plus-stenography_001",
+  "experiment_id": "codebrain_stenography_ab",
+  "variant": "codebrain_plus_stenography",
+  "repo_sha": "abc123",
+  "features": {
+    "codebrain_symbol_query": true,
+    "codebrain_impact_analysis": true,
+    "stenography_context_pack": true,
+    "agent_lens_telemetry": true
+  },
+  "eval": {
+    "type": "pytest",
+    "command": "pytest tests/"
+  }
+}
+```
+
+Record it with:
+
+```bash
+agent-bench run record --metadata run.json --telemetry telemetry.jsonl
+```
+
+`summary.json` includes speed, token, cost, tool, diff, and eval fields. Failed
+runs are kept in reports and comparisons.
+
+## APM Packaging
+
+AgentLens exposes APM-first agent assets at:
+
+```text
+.apm/
+  instructions/
+  skills/
+    agent-lens-telemetry/
+    agent-lens-benchmark/
+```
+
+Install package assets with Microsoft Agent Package Manager:
+
+```bash
+apm install
+```
+
+Generated agent folders are install output derived from `.apm/`; commit source
+package files under `.apm/`, `apm.yml`, and `apm.lock.yaml`, but do not commit
+local generated installs, run artifacts, `dist/`, or `node_modules/`. The root
+`apm.yml` uses `includes: auto` and explicit empty dependency lists until
+extracted APM dependency packages are added.
 
 ## Adding Agent Adapters
 

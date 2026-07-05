@@ -1,0 +1,10 @@
+name: agent-lens
+version: 0.2.0
+description: Measurement and evidence layer for agentic coding experiments.
+includes: auto
+author: jackycct
+license: MIT
+dependencies:
+  apm: []
+  mcp: []
+scripts: {}

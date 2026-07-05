@@ -1,16 +1,20 @@
 $ErrorActionPreference = "Stop"
 
 $repoRoot = Split-Path -Parent $PSScriptRoot
-$skillsRoot = Join-Path $repoRoot "agentic-system-telemetry\skills"
+$skillsRoots = @(
+    (Join-Path $repoRoot "agentic-system-telemetry\skills"),
+    (Join-Path $repoRoot ".apm\skills")
+)
 
-if (-not (Test-Path -LiteralPath $skillsRoot)) {
-    throw "Missing skills root: $skillsRoot"
+$skillFiles = @()
+foreach ($skillsRoot in $skillsRoots) {
+    if (Test-Path -LiteralPath $skillsRoot) {
+        $skillFiles += Get-ChildItem -LiteralPath $skillsRoot -Recurse -Filter "SKILL.md"
+    }
 }
 
-$skillFiles = Get-ChildItem -LiteralPath $skillsRoot -Recurse -Filter "SKILL.md"
-
 if ($skillFiles.Count -eq 0) {
-    throw "No SKILL.md files found under $skillsRoot"
+    throw "No SKILL.md files found under configured skill roots"
 }
 
 $failed = $false

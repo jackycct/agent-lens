@@ -9,7 +9,8 @@ export function artifactMap(): ArtifactMap {
     raw_events: "raw.jsonl",
     diff: "diff.patch",
     diffstat: "diffstat.txt",
-    test_log: "test.log"
+    test_log: "test.log",
+    eval_log: "eval.log"
   };
 }
 

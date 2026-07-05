@@ -2,14 +2,19 @@
 import { compareCommandHandler } from "./compare.js";
 import { parseArgs } from "./args.js";
 import { reportCommandHandler } from "./report.js";
-import { runCommandHandler } from "./run.js";
+import { recordRunCommandHandler, runCommandHandler } from "./run.js";
 
 async function main(): Promise<void> {
   const [command, ...rest] = process.argv.slice(2);
-  const args = parseArgs(rest);
+  const subcommand = rest[0]?.startsWith("--") ? null : rest[0];
+  const args = parseArgs(subcommand ? rest.slice(1) : rest);
   switch (command) {
     case "run":
-      await runCommandHandler(args);
+      if (subcommand === "record") {
+        await recordRunCommandHandler(args);
+      } else {
+        await runCommandHandler(args);
+      }
       break;
     case "compare":
       await compareCommandHandler(args);
@@ -28,6 +33,7 @@ function printHelp(): void {
 
 Commands:
   run      Run a controlled agent benchmark
+  run record  Record metadata and telemetry JSONL as benchmark evidence
   compare  Compare baseline and candidate summary.json files
   report   Generate Markdown report from summary.json
 `);
