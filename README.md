@@ -16,6 +16,18 @@ This repository currently contains the first open-source foundation:
 Contributor setup, workflow, skill packaging, report/Jira usage, and
 troubleshooting are documented in `docs/wiki/README.md`.
 
+## Architecture And Specs
+
+- `AGENTS.md`: coding-agent entrypoint and validation guidance.
+- `docs/architecture.md`: AgentLens boundaries, runtime flow, and adapter model.
+- `docs/design/adapter-boundary.md`: adapter responsibilities and exclusions.
+- `docs/metrics/taxonomy.md`: speed, token, cost, tool, diff, eval, and review
+  metric definitions.
+- `docs/spec/telemetry-schema.md`: external metadata and telemetry input
+  contract.
+- `docs/spec/run-summary-schema.md`: normalized `summary.json` contract.
+- `docs/spec/comparison-schema.md`: normalized comparison output contract.
+
 ## Install
 
 ```bash
