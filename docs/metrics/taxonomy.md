@@ -17,9 +17,8 @@ provide reliable evidence.
 - `commit_sha`: source commit before the run when available.
 - `prompt_hash`: SHA-256 hash of the prompt or metadata surrogate.
 
-Avionics feature state belongs in `features`, for example
-`avionics_orchestrated=true`, `codebrain_symbol_query=true`, or
-`stenography_context_pack=false`.
+Optional tool and orchestration state belongs in `features`, for example
+`orchestrated=true`, `repo_intelligence=true`, or `context_pack=false`.
 
 ## Speed
 

@@ -5,8 +5,8 @@ description: Record agent run metadata, feature toggles, telemetry JSONL, comman
 
 # AgentLens Telemetry
 
-Use this skill when an agent or orchestration layer needs to record a run as
-measurement evidence without depending on Avionics internals.
+Use this skill when an agent, tool, or orchestration layer needs to record a run
+as measurement evidence without depending on upstream system internals.
 
 ## Inputs
 

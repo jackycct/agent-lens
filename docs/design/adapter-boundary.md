@@ -31,9 +31,9 @@ Adapters must not:
 
 - decide benchmark promotion
 - rewrite comparison recommendations
-- own Avionics experiment scheduling
-- query Codebrain directly for repository understanding
-- perform Stenography context compression
+- own experiment scheduling
+- query external repository-intelligence systems directly
+- perform context compression
 - mutate shared schema fields outside the normalized metric contract
 
 ## Core Responsibilities

@@ -1,8 +1,9 @@
 # AgentLens Architecture
 
-AgentLens is the evidence layer for the Avionics ecosystem. It records what an
-agent run did, normalizes the evidence into stable schemas, and produces reports
-that help humans decide whether a workflow variant should be adopted.
+AgentLens is a standalone evidence layer for agentic engineering systems. It
+records what an agent run did, normalizes the evidence into stable schemas, and
+produces reports that help humans decide whether a workflow variant should be
+adopted.
 
 ## Responsibilities
 
@@ -18,9 +19,9 @@ AgentLens owns:
 
 AgentLens does not own:
 
-- Avionics workflow orchestration or experiment scheduling
-- Codebrain repository understanding, symbol search, or impact analysis
-- Stenography context compression or context-pack construction
+- workflow orchestration or experiment scheduling
+- repository understanding, symbol search, or impact analysis
+- context compression or context-pack construction
 - long-term dashboards or production data storage
 
 External systems pass their state into AgentLens as explicit metadata and
@@ -85,8 +86,8 @@ Experiment identity is first-class:
 
 - `experiment_id`: stable name for the experiment family.
 - `variant`: the compared workflow, prompt, model, or tool configuration.
-- `features`: structured feature state, including Avionics, Codebrain,
-  Stenography, and AgentLens toggles when relevant.
+- `features`: structured feature state for optional tools, orchestration,
+  context sources, and AgentLens toggles when relevant.
 
 Feature state must be explicit because AgentLens reports should explain what
 changed without depending on upstream orchestrator state.
