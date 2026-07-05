@@ -81,7 +81,11 @@ make verify
 
 - Skill directory name matches frontmatter `name`.
 - `description` is concise and action-oriented.
-- `apm.yml` lists the packaged skills and instructions.
+- `apm.yml` uses `includes: auto` so `.apm/` instructions and skills are
+  discovered from the producer package.
+- `apm.yml` declares only real local package dependencies under
+  `dependencies.apm`; leave it empty when the repo has no extracted dependency
+  packages.
 - `apm.lock.yaml` is updated when package contents change.
 - Examples use repo-supported commands.
 - Validation passes on Windows from the repo root.
