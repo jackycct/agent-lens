@@ -7,6 +7,8 @@
   "required": [
     "baseline",
     "candidate",
+    "experiment_id",
+    "variants",
     "wall_ms_delta",
     "wall_ms_delta_percent",
     "total_tokens_delta",
@@ -20,6 +22,30 @@
   "properties": {
     "baseline": { "type": "string" },
     "candidate": { "type": "string" },
+    "experiment_id": { "type": ["string", "null"] },
+    "variants": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["run_id", "variant", "success", "eval_passed", "total_tokens", "estimated_total_tokens", "wall_ms", "cost_usd", "tool_call_count", "diff_files", "diff_lines", "features"],
+        "properties": {
+          "run_id": { "type": "string" },
+          "variant": { "type": "string" },
+          "success": { "type": "boolean" },
+          "eval_passed": { "type": ["boolean", "null"] },
+          "total_tokens": { "type": ["integer", "null"] },
+          "estimated_total_tokens": { "type": ["integer", "null"] },
+          "wall_ms": { "type": "integer" },
+          "cost_usd": { "type": ["number", "null"] },
+          "tool_call_count": { "type": ["integer", "null"] },
+          "diff_files": { "type": "integer" },
+          "diff_lines": { "type": "integer" },
+          "features": { "type": "object" }
+        }
+      }
+    },
     "wall_ms_delta": { "type": ["integer", "null"] },
     "wall_ms_delta_percent": { "type": ["number", "null"] },
     "total_tokens_delta": { "type": ["integer", "null"] },

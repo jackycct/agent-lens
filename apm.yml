@@ -1,0 +1,13 @@
+name: agent-lens
+version: 0.2.0
+description: Measurement and evidence layer for agentic coding experiments.
+instructions:
+  - .apm/instructions/agent-lens.md
+skills:
+  - .apm/skills/agent-lens-telemetry
+  - .apm/skills/agent-lens-benchmark
+files:
+  - README.md
+  - docs/wiki/skill-packaging.md
+  - agentic-system-telemetry/packages/agent-bench/src/schemas/agent-run.schema.json
+  - agentic-system-telemetry/packages/agent-bench/src/schemas/comparison.schema.json

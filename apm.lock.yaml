@@ -1,0 +1,13 @@
+name: agent-lens
+version: 0.2.0
+generated_at: 2026-07-05T00:00:00Z
+package_manager: Microsoft Agent Package Manager
+entries:
+  instructions:
+    - path: .apm/instructions/agent-lens.md
+      sha256: pending-local-package
+  skills:
+    - path: .apm/skills/agent-lens-telemetry/SKILL.md
+      sha256: pending-local-package
+    - path: .apm/skills/agent-lens-benchmark/SKILL.md
+      sha256: pending-local-package

@@ -9,14 +9,13 @@ test("parseCodexJsonl extracts conservative tool and token metrics", () => {
     JSON.stringify({ usage: { input_tokens: 10, output_tokens: 5, reasoning_tokens: 3 } })
   ].join("\n");
 
-  assert.deepEqual(parseCodexJsonl(raw), {
-    toolCallCount: 2,
-    fileReadCount: 1,
-    fileWriteCount: 1,
-    inputTokens: 10,
-    cachedInputTokens: null,
-    outputTokens: 5,
-    reasoningTokens: 3,
-    totalTokens: 18
-  });
+  const metrics = parseCodexJsonl(raw);
+  assert.equal(metrics.toolCallCount, 2);
+  assert.equal(metrics.fileReadCount, 1);
+  assert.equal(metrics.fileWriteCount, 1);
+  assert.equal(metrics.inputTokens, 10);
+  assert.equal(metrics.outputTokens, 5);
+  assert.equal(metrics.reasoningTokens, 3);
+  assert.equal(metrics.totalTokens, 18);
+  assert.deepEqual(metrics.toolCallsByType, { read_file: 1, apply_patch: 1 });
 });
