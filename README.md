@@ -21,6 +21,8 @@ troubleshooting are documented in `docs/wiki/README.md`.
 - `AGENTS.md`: coding-agent entrypoint and validation guidance.
 - `docs/architecture.md`: AgentLens boundaries, runtime flow, and adapter model.
 - `docs/design/adapter-boundary.md`: adapter responsibilities and exclusions.
+- `docs/benchmarks/portfolio.md`: benchmark track strategy and shared scenario
+  metadata.
 - `docs/metrics/taxonomy.md`: speed, token, cost, tool, diff, eval, and review
   metric definitions.
 - `docs/spec/telemetry-schema.md`: external metadata and telemetry input
