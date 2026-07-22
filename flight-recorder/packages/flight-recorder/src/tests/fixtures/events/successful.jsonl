@@ -1,0 +1,2 @@
+{"schema_version":"1.0","event_id":"task-1","run_id":"success","timestamp":"2026-07-22T00:00:00.000Z","type":"task"}
+{"schema_version":"1.0","event_id":"test-1","run_id":"success","timestamp":"2026-07-22T00:00:01.000Z","type":"test","attributes":{"outcome":"passed"}}
