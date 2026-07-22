@@ -7,6 +7,9 @@ Flight Recorder accepts telemetry from two sources:
 
 Both paths normalize into `RunSummary`.
 
+For the versioned interoperable event envelope and OpenTelemetry mapping, see
+[Agent SDLC Telemetry](agent-sdlc-telemetry.md).
+
 ## External Metadata
 
 `flight-recorder run record --metadata run.json --telemetry telemetry.jsonl` expects
