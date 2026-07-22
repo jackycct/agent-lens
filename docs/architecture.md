@@ -1,13 +1,13 @@
-# AgentLens Architecture
+# Avionics Flight Recorder Architecture
 
-AgentLens is a standalone evidence layer for agentic engineering systems. It
+Avionics Flight Recorder is a standalone evidence layer for agentic engineering systems. It
 records what an agent run did, normalizes the evidence into stable schemas, and
 produces reports that help humans decide whether a workflow variant should be
 adopted.
 
 ## Responsibilities
 
-AgentLens owns:
+Flight Recorder owns:
 
 - telemetry schema and normalized metric names
 - run capture and artifact layout
@@ -17,25 +17,25 @@ AgentLens owns:
 - adoption recommendation evidence
 - adapter contracts for agent-specific execution and telemetry parsing
 
-AgentLens does not own:
+Flight Recorder does not own:
 
 - workflow orchestration or experiment scheduling
 - repository understanding, symbol search, or impact analysis
 - context compression or context-pack construction
 - long-term dashboards or production data storage
 
-External systems pass their state into AgentLens as explicit metadata and
-telemetry. AgentLens preserves that evidence; it does not recreate the upstream
+External systems pass their state into Flight Recorder as explicit metadata and
+telemetry. Flight Recorder preserves that evidence; it does not recreate the upstream
 system's decision logic.
 
 ## Package Layout
 
-- `agentic-system-telemetry/packages/agent-bench`: TypeScript CLI and library
+- `flight-recorder/packages/flight-recorder`: TypeScript CLI and library
   code for run capture, reporting, and comparison.
-- `agentic-system-telemetry/skills/agentic-system-telemetry`: reusable agent
+- `flight-recorder/skills/flight-recorder`: reusable agent
   guidance for telemetry workflows.
-- `.apm/skills/agent-lens-telemetry`: APM packaged telemetry skill.
-- `.apm/skills/agent-lens-benchmark`: APM packaged benchmark skill.
+- `.apm/skills/flight-recorder-telemetry`: APM packaged telemetry skill.
+- `.apm/skills/flight-recorder-benchmark`: APM packaged benchmark skill.
 - `docs/spec`: human-readable data contracts.
 - `docs/design`: design notes for stable boundaries.
 - `docs/metrics`: metric taxonomy and interpretation rules.
@@ -43,7 +43,7 @@ system's decision logic.
 
 ## Runtime Flow
 
-`agent-bench run`:
+`flight-recorder run`:
 
 1. reads a prompt and benchmark metadata
 2. optionally resets the target repo
@@ -51,19 +51,19 @@ system's decision logic.
 4. captures stdout, stderr, raw events, diffs, diffstat, and optional eval logs
 5. normalizes metrics into `summary.json`
 
-`agent-bench run record`:
+`flight-recorder run record`:
 
 1. reads externally produced metadata and telemetry JSONL
 2. optionally runs the declared eval command
 3. normalizes external evidence into the same `summary.json` contract
 
-`agent-bench compare`:
+`flight-recorder compare`:
 
 1. reads two run summaries
 2. computes deltas for speed, tokens, tools, diff size, tests, and success
 3. writes `comparison.json` and `comparison.md`
 
-`agent-bench report`:
+`flight-recorder report`:
 
 1. reads one run summary
 2. writes a Markdown report for pull requests, Jira tickets, or experiment logs
@@ -87,14 +87,14 @@ Experiment identity is first-class:
 - `experiment_id`: stable name for the experiment family.
 - `variant`: the compared workflow, prompt, model, or tool configuration.
 - `features`: structured feature state for optional tools, orchestration,
-  context sources, and AgentLens toggles when relevant.
+  context sources, and Flight Recorder toggles when relevant.
 
-Feature state must be explicit because AgentLens reports should explain what
+Feature state must be explicit because Flight Recorder reports should explain what
 changed without depending on upstream orchestrator state.
 
 ## Schema Sources
 
 Human-readable specs live in `docs/spec/`. Runtime TypeScript contracts live in
-`agentic-system-telemetry/packages/agent-bench/src/core/schema.ts`. JSON Schema
+`flight-recorder/packages/flight-recorder/src/core/schema.ts`. JSON Schema
 files used for generated artifacts live in
-`agentic-system-telemetry/packages/agent-bench/src/schemas/`.
+`flight-recorder/packages/flight-recorder/src/schemas/`.

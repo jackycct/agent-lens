@@ -1,12 +1,11 @@
 {
-  "name": "@agent-lens/agent-bench",
+  "name": "@avionics/flight-recorder",
   "version": "0.1.0",
-  "description": "CLI runner for agentic-system telemetry benchmarks.",
+  "description": "Avionics Flight Recorder CLI for agentic engineering evidence and benchmarks.",
   "license": "MIT",
   "type": "module",
   "bin": {
-    "agent-bench": "./dist/cli/index.js",
-    "agent-lens": "./dist/cli/index.js"
+    "flight-recorder": "./dist/cli/index.js"
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",

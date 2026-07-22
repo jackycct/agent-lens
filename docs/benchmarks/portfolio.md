@@ -1,13 +1,13 @@
 # Benchmark Portfolio
 
-AgentLens should compare agentic engineering systems across a portfolio of
+Flight Recorder should compare agentic engineering systems across a portfolio of
 benchmark tracks. No single public benchmark proves every agent workflow.
 ProgramBench is useful for binary-first behavior reconstruction, but it does
 not prove source-aware repository intelligence. SWE-bench-style tasks exercise
 that different capability. Terminal and enterprise tracks add operational and
 organizational evidence that public issue-fixing tasks do not cover.
 
-The portfolio exists to produce reproducible AgentLens artifacts, not marketing
+The portfolio exists to produce reproducible Flight Recorder artifacts, not marketing
 claims. Results should be cited only when the prompt, base ref, feature state,
 validation command, and generated artifacts are preserved.
 
@@ -15,7 +15,7 @@ validation command, and generated artifacts are preserved.
 
 | Track | Primary evidence target | Secondary evidence |
 | --- | --- | --- |
-| ProgramBench small tasks | binary-first behavior reconstruction | prompt discipline, deterministic artifact capture, AgentLens telemetry |
+| ProgramBench small tasks | binary-first behavior reconstruction | prompt discipline, deterministic artifact capture, Flight Recorder telemetry |
 | SWE-bench Lite / Verified style issue fixing | source-aware issue resolution | test selection, impact analysis, reviewable diffs |
 | Multi-SWE / multilingual tasks | polyglot repository work | cross-language symbol lookup, build-system handling, adapter breadth |
 | Terminal-Bench style tasks | operational terminal execution | shell correctness, environment repair, repeatable command logs |
@@ -25,7 +25,7 @@ validation command, and generated artifacts are preserved.
 
 ### ProgramBench Small Tasks
 
-Start with small, inspectable tasks where AgentLens can compare prompt variants,
+Start with small, inspectable tasks where Flight Recorder can compare prompt variants,
 tool behavior, wall time, token use, and final validation without large
 infrastructure. Recommended candidates:
 
@@ -35,7 +35,7 @@ infrastructure. Recommended candidates:
 - `jq` subset: composable JSON filtering without requiring the full language.
 
 Use these tasks to evaluate benchmark capture, prompt discipline, tool behavior,
-and AgentLens telemetry. Do not treat them as proof of source-repository
+and Flight Recorder telemetry. Do not treat them as proof of source-repository
 intelligence because the core task intentionally withholds source during
 behavior reconstruction.
 
@@ -89,8 +89,8 @@ Each benchmark scenario should define this metadata before the run starts:
 | `base_ref` | Git commit, tag, branch, release, or benchmark version used as the starting point |
 | `prompt` | Prompt file path or prompt artifact identifier |
 | `variant` | Workflow, model, prompt, or tool configuration being compared |
-| `features` | Explicit feature-state map for optional tools, orchestration, context sources, AgentLens, and local toggles |
-| `validation_command` | Command AgentLens should run or record as the eval evidence |
+| `features` | Explicit feature-state map for optional tools, orchestration, context sources, Flight Recorder, and local toggles |
+| `validation_command` | Command Flight Recorder should run or record as the eval evidence |
 | `expected_artifacts` | Required artifacts such as `summary.json`, `raw.jsonl`, `diff.patch`, `diffstat.txt`, `test.log`, and reports |
 
 Feature state belongs in metadata rather than in benchmark-specific prose so
@@ -103,11 +103,11 @@ comparisons can explain which capabilities changed.
 - Preserve raw events and generated summaries for every cited result.
 - Attach reports to pull requests, Jira tickets, or engineering review notes
   instead of committing generated `runs/` output.
-- Avoid adoption claims unless the result is backed by reproducible AgentLens
+- Avoid adoption claims unless the result is backed by reproducible Flight Recorder
   artifacts and the relevant failure modes are documented.
 
 ## Non-Goals
 
 This portfolio does not implement every benchmark runner. It defines the first
-strategy and metadata contract so `agent-bench` can record and compare evidence
+strategy and metadata contract so `flight-recorder` can record and compare evidence
 consistently as tracks are added.

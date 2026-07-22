@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://agent-lens.local/schemas/agent-run.schema.json",
-  "title": "AgentLens Run Summary",
+  "$id": "https://avionics.local/flight-recorder/schemas/agent-run.schema.json",
+  "title": "Avionics Flight Recorder Run Summary",
   "type": "object",
   "additionalProperties": false,
   "required": [

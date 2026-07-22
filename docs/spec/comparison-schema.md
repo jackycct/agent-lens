@@ -1,10 +1,10 @@
 # Comparison Schema
 
-`comparison.json` is the normalized output of `agent-bench compare`. The runtime
+`comparison.json` is the normalized output of `flight-recorder compare`. The runtime
 TypeScript contract is `ComparisonSummary` in
-`agentic-system-telemetry/packages/agent-bench/src/core/schema.ts`. The JSON
+`flight-recorder/packages/flight-recorder/src/core/schema.ts`. The JSON
 Schema file is
-`agentic-system-telemetry/packages/agent-bench/src/schemas/comparison.schema.json`.
+`flight-recorder/packages/flight-recorder/src/schemas/comparison.schema.json`.
 
 ## Inputs
 

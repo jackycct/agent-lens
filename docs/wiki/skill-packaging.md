@@ -1,9 +1,9 @@
 # Skill Packaging
 
-AgentLens skills live under:
+Flight Recorder skills live under:
 
 ```text
-agentic-system-telemetry/skills/<skill-name>/SKILL.md
+flight-recorder/skills/<skill-name>/SKILL.md
 .apm/skills/<skill-name>/SKILL.md
 ```
 
@@ -29,7 +29,7 @@ Use this shape:
 
 ```markdown
 ---
-name: agentic-system-telemetry
+name: flight-recorder
 description: Measure coding-agent runs across Codex, Claude Code, GitHub Copilot, and compatible future agents.
 ---
 ```
@@ -45,7 +45,7 @@ Run:
 make skill-verify
 ```
 
-The verifier checks package skills in both `agentic-system-telemetry/skills/`
+The verifier checks package skills in both `flight-recorder/skills/`
 and `.apm/skills/` for valid frontmatter, required fields, and a directory name
 that matches `name`.
 

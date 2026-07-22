@@ -1,9 +1,9 @@
 ---
-name: agentic-system-telemetry
+name: flight-recorder
 description: Measure coding-agent runs across Codex, Claude Code, GitHub Copilot, and compatible future agents.
 ---
 
-# Agentic-System Telemetry
+# Avionics Flight Recorder
 
 Use this skill when you need evidence-backed decisions about whether an
 agentic coding system became faster, cheaper, safer, or better.
@@ -26,12 +26,12 @@ agentic coding system became faster, cheaper, safer, or better.
 
 1. Freeze the repo input state and record `commit_sha`.
 2. Store the prompt in a file and hash it with SHA-256.
-3. Run `agent-bench run` with explicit `agent`, `scenario`, and `variant`.
+3. Run `flight-recorder run` with explicit `agent`, `scenario`, and `variant`.
 4. Capture stdout, stderr, raw events, wall-clock time, exit code, diff, and diff stats.
 5. Run optional quality gates through `--test-command`.
 6. Produce `summary.json`.
 7. Repeat with a candidate variant when comparing systems.
-8. Use `agent-bench compare` and `agent-bench report` for decision output.
+8. Use `flight-recorder compare` and `flight-recorder report` for decision output.
 
 ## Output Schema
 
@@ -73,7 +73,7 @@ Required fields include:
 Compare runs with:
 
 ```bash
-agent-bench compare \
+flight-recorder compare \
   --baseline runs/2026-06-06/<baseline>/summary.json \
   --candidate runs/2026-06-06/<candidate>/summary.json
 ```
@@ -118,7 +118,7 @@ Reuse TokenTelemetry responsibly:
 ## Packaging
 
 This skill is packaged under
-`agentic-system-telemetry/skills/agentic-system-telemetry/SKILL.md`.
+`flight-recorder/skills/flight-recorder/SKILL.md`.
 Before release, run `make skill-verify` from the repository root and follow
 `docs/wiki/skill-packaging.md`.
 

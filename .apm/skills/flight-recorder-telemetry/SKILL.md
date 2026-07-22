@@ -1,9 +1,9 @@
 ---
-name: agent-lens-telemetry
+name: flight-recorder-telemetry
 description: Record agent run metadata, feature toggles, telemetry JSONL, command evals, and evidence artifacts.
 ---
 
-# AgentLens Telemetry
+# Flight Recorder Telemetry
 
 Use this skill when an agent, tool, or orchestration layer needs to record a run
 as measurement evidence without depending on upstream system internals.
@@ -19,7 +19,7 @@ as measurement evidence without depending on upstream system internals.
 
 1. Keep feature toggle state in the run metadata.
 2. Record raw telemetry as JSONL.
-3. Run `agent-bench run record --metadata run.json --telemetry telemetry.jsonl`.
+3. Run `flight-recorder run record --metadata run.json --telemetry telemetry.jsonl`.
 4. Inspect `summary.json`, `eval.log`, and `raw.jsonl`.
 5. Preserve failed runs; do not delete or hide them before comparison.
 

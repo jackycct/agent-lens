@@ -2,7 +2,7 @@ $ErrorActionPreference = "Stop"
 
 $repoRoot = Split-Path -Parent $PSScriptRoot
 $skillsRoots = @(
-    (Join-Path $repoRoot "agentic-system-telemetry\skills"),
+    (Join-Path $repoRoot "flight-recorder\skills"),
     (Join-Path $repoRoot ".apm\skills")
 )
 

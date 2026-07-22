@@ -1,0 +1,76 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import { renderRunReport } from "../../cli/report.js";
+import type { RunSummary } from "../../core/schema.js";
+
+const summary = {
+  run_id: "report-test",
+  experiment_id: "report-test",
+  agent: "codex",
+  agent_version: null,
+  model: null,
+  scenario: "test",
+  variant: "baseline",
+  features: {},
+  eval: null,
+  repo_path: ".",
+  commit_sha: null,
+  prompt_hash: "0".repeat(64),
+  started_at: "2026-07-22T00:00:00.000Z",
+  ended_at: "2026-07-22T00:00:01.000Z",
+  wall_ms: 1000,
+  exit_code: 0,
+  success: true,
+  tests_passed: true,
+  test_exit_code: 0,
+  test_wall_ms: 1,
+  eval_command: null,
+  eval_exit_code: null,
+  eval_passed: null,
+  eval_wall_ms: null,
+  eval_test_count: null,
+  eval_passed_count: null,
+  eval_failed_count: null,
+  time_to_first_edit_ms: null,
+  time_to_first_successful_eval_ms: null,
+  tool_execution_ms: null,
+  eval_execution_ms: null,
+  tool_call_count: null,
+  tool_calls_by_type: {},
+  file_read_count: null,
+  file_write_count: null,
+  failed_tool_call_count: null,
+  repeated_tool_call_count: null,
+  search_to_edit_ratio: null,
+  test_command_count: 0,
+  input_tokens: null,
+  cached_input_tokens: null,
+  output_tokens: null,
+  reasoning_tokens: null,
+  tool_result_tokens: null,
+  total_tokens: null,
+  estimated_total_tokens: null,
+  diff_files: 0,
+  diff_added: 0,
+  diff_deleted: 0,
+  production_files_changed: null,
+  test_files_changed: null,
+  unrelated_files_changed: null,
+  cost_usd: null,
+  cost_per_successful_eval_usd: null,
+  diff_artifact_path: "diff.patch",
+  eval_log_artifact_path: "eval.log",
+  artifacts: {
+    stdout: "stdout.log",
+    stderr: "stderr.log",
+    raw_events: "raw.jsonl",
+    diff: "diff.patch",
+    diffstat: "diffstat.txt",
+    test_log: "test.log",
+    eval_log: "eval.log"
+  }
+} satisfies RunSummary;
+
+test("renderRunReport uses the Flight Recorder identity", () => {
+  assert.match(renderRunReport(summary), /^# Avionics Flight Recorder Report/m);
+});
