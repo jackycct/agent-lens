@@ -43,6 +43,15 @@ and cost fields derive from `tool.call`, `context.read`/`file.edit`, `command`,
 `cost`, and `outcome` events. Diff and eval fields derive from `diff` and
 `test` events. A missing source event produces `null`, not zero.
 
+| Summary metric group | Event source or derived calculation |
+| --- | --- |
+| speed | lifecycle timestamps; `command`, `test`, and `file.edit` duration |
+| tokens/cost | `cost` metrics or GenAI usage attributes |
+| tool behaviour | `tool.call`, `context.read`, `search`, and `file.edit` counts |
+| diff | `diff` attributes and its referenced artifact |
+| eval | `test` outcome, counters, and referenced log |
+| success | terminal `outcome` combined with declared eval result |
+
 ## Redaction
 
 Never place prompt text, source contents, secrets, credentials, or absolute
