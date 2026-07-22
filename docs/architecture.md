@@ -98,3 +98,6 @@ Human-readable specs live in `docs/spec/`. Runtime TypeScript contracts live in
 `flight-recorder/packages/flight-recorder/src/core/schema.ts`. JSON Schema
 files used for generated artifacts live in
 `flight-recorder/packages/flight-recorder/src/schemas/`.
+
+The versioned Agent SDLC event contract is specified in
+`docs/spec/agent-sdlc-telemetry.md`.
