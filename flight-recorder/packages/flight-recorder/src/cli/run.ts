@@ -9,7 +9,51 @@ import { runCommand } from "../core/process.js";
 import type { AgentName, EvalMetadata, FeatureToggles, NormalizedMetrics, RunMetadataContract, RunSummary } from "../core/schema.js";
 import { emptyMetrics } from "../core/schema.js";
 import { parseEvalLog, parseTelemetryJsonl } from "../core/telemetry.js";
-import { optionalString, requireString } from "./args.js";
+import { optionalString, positionals, requireString } from "./args.js";
+
+export async function recordCommandHandler(args: Record<string, string | boolean>): Promise<void> {
+  const command = positionals(args);
+  if (!command.length) throw new Error("record requires a command after --");
+  const repoPath = resolve(optionalString(args, "repo") ?? ".");
+  const outDir = resolve(optionalString(args, "out-dir") ?? "runs");
+  const runId = randomUUID();
+  const runDir = await createRunDir(outDir, runId);
+  const artifacts = artifactMap();
+  const started = new Date();
+  const result = await runCommand(command[0], command.slice(1), { cwd: repoPath });
+  const ended = new Date();
+  const diff = await gitDiff(repoPath);
+  const diffstat = await gitDiffNumstat(repoPath);
+  const stats = parseNumstat(diffstat);
+  const summary = buildSummary({
+    run_id: runId, experiment_id: optionalString(args, "issue"),
+    agent: (optionalString(args, "agent") ?? inferAgent(command[0])) as AgentName,
+    agent_version: null, model: optionalString(args, "model"), scenario: optionalString(args, "task") ?? "recorded-session",
+    variant: "record", features: { content_capture: false }, eval: null, repo_path: repoPath,
+    commit_sha: await currentCommit(repoPath), prompt_hash: sha256(command.join(" ")),
+    started_at: started.toISOString(), ended_at: ended.toISOString(), wall_ms: result.wallMs,
+    exit_code: result.exitCode, success: result.exitCode === 0, tests_passed: null, test_exit_code: null,
+    test_wall_ms: null, diff_files: stats.files, diff_added: stats.added, diff_deleted: stats.deleted,
+    production_files_changed: null, test_files_changed: null, unrelated_files_changed: null,
+    metrics: emptyMetrics(), eval_stats: parseEvalLog(""), artifacts
+  });
+  await writeTextArtifact(runDir, artifacts.stdout, result.stdout);
+  await writeTextArtifact(runDir, artifacts.stderr, result.stderr);
+  await writeTextArtifact(runDir, artifacts.raw_events, "");
+  await writeTextArtifact(runDir, artifacts.diff, diff);
+  await writeTextArtifact(runDir, artifacts.diffstat, diffstat);
+  await writeTextArtifact(runDir, artifacts.test_log, "");
+  await writeTextArtifact(runDir, artifacts.eval_log, "");
+  await writeJsonArtifact(runDir, "metadata.json", { command, content_capture: false, source: "record" });
+  await writeJsonArtifact(runDir, "summary.json", summary);
+  console.log(`summary: ${runDir}/summary.json`);
+}
+
+function inferAgent(command: string): AgentName {
+  if (/claude/i.test(command)) return "claude";
+  if (/copilot/i.test(command)) return "copilot";
+  return "codex";
+}
 
 export async function runCommandHandler(args: Record<string, string | boolean>): Promise<void> {
   const agent = requireString(args, "agent") as AgentName;
