@@ -1,6 +1,6 @@
-# AgentLens Contribution Wiki
+# Avionics Flight Recorder Contribution Wiki
 
-This wiki is the contributor entrypoint for AgentLens. It complements
+This wiki is the contributor entrypoint for Avionics Flight Recorder. It complements
 `README.md` and `CONTRIBUTING.md` with task-focused guidance for humans and
 coding agents.
 
@@ -11,6 +11,7 @@ coding agents.
 - [Skill Packaging](skill-packaging.md)
 - [Reports, PRs, And Jira](reports-and-jira.md)
 - [Troubleshooting](troubleshooting.md)
+- [Migration Guide](../migration.md)
 
 ## Command Contract
 

@@ -1,6 +1,6 @@
-name: agent-lens
+name: avionics-flight-recorder
 version: 0.2.0
-description: Measurement and evidence layer for agentic coding experiments
+description: Avionics Flight Recorder evidence and observability for agentic coding experiments
 author: jackycct
 license: MIT
 type: hybrid
@@ -18,13 +18,13 @@ dependencies:
   mcp: []
   lsp: []
 scripts:
-  start: "agent-lens --help"
-  record: "agent-lens run record --metadata {metadata} --telemetry {telemetry}"
-  compare: "agent-lens compare {baseline} {candidate}"
-  report: "agent-lens report --summary {summary}"
+  start: "flight-recorder --help"
+  record: "flight-recorder run record --metadata {metadata} --telemetry {telemetry}"
+  compare: "flight-recorder compare {baseline} {candidate}"
+  report: "flight-recorder report --summary {summary}"
 policy:
-  fetch_failure_default: block
-x-agent-lens:
+  fetch_failure_default: warn
+x-avionics-flight-recorder:
   role: measurement
   metrics:
     - wall_time

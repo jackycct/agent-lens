@@ -25,7 +25,7 @@ export class CodexAdapter implements AgentAdapter {
 }
 
 function codexArgs(input: AgentRunInput): string[] {
-  if (process.env.AGENT_BENCH_CODEX_MODE === "quiet") {
+  if (process.env.FLIGHT_RECORDER_CODEX_MODE === "quiet") {
     const args = ["-q"];
     if (input.model) args.push("--model", input.model);
     args.push(input.prompt);
@@ -40,7 +40,7 @@ function codexArgs(input: AgentRunInput): string[] {
 }
 
 function codexCommand(): { command: string; prefixArgs: string[] } {
-  const override = process.env.AGENT_BENCH_CODEX_COMMAND;
+  const override = process.env.FLIGHT_RECORDER_CODEX_COMMAND;
   if (override) return { command: override, prefixArgs: [] };
 
   if (process.platform === "win32") {

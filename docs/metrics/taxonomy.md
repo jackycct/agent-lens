@@ -1,6 +1,6 @@
 # Metric Taxonomy
 
-AgentLens metrics describe the evidence needed to compare agentic engineering
+Flight Recorder metrics describe the evidence needed to compare agentic engineering
 runs. Metrics should be stable, explicit, and nullable when a source cannot
 provide reliable evidence.
 
@@ -53,7 +53,7 @@ Optional tool and orchestration state belongs in `features`, for example
 - `failed_tool_call_count`: failed tool calls.
 - `repeated_tool_call_count`: repeated calls that indicate thrash or retry.
 - `search_to_edit_ratio`: search/read activity divided by edit activity.
-- `test_command_count`: eval commands launched by AgentLens.
+- `test_command_count`: eval commands launched by Flight Recorder.
 
 ## Diff
 
@@ -84,7 +84,7 @@ Optional tool and orchestration state belongs in `features`, for example
 - `success`: true when the agent exits cleanly and the declared eval passes.
 - `recommendation`: comparison-level adoption guidance.
 - Human review outcome is not captured automatically today. Store it in the PR,
-  Jira ticket, or experiment log that references the AgentLens report until a
+  Jira ticket, or experiment log that references the Flight Recorder report until a
   dedicated schema field is introduced.
 
 ## Nullability

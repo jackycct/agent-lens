@@ -1,13 +1,11 @@
-name: agent-lens
-version: 0.2.0
-generated_at: 2026-07-05T00:00:00Z
-package_manager: Microsoft Agent Package Manager
-entries:
-  instructions:
-    - path: .apm/instructions/agent-lens.md
-      sha256: pending-local-package
-  skills:
-    - path: .apm/skills/agent-lens-telemetry/SKILL.md
-      sha256: pending-local-package
-    - path: .apm/skills/agent-lens-benchmark/SKILL.md
-      sha256: pending-local-package
+lockfile_version: '1'
+generated_at: 2026-07-05 00:00:00+00:00
+dependencies: []
+local_deployed_files:
+- .agents/skills/flight-recorder-benchmark
+- .agents/skills/flight-recorder-benchmark/SKILL.md
+- .agents/skills/flight-recorder-telemetry
+- .agents/skills/flight-recorder-telemetry/SKILL.md
+local_deployed_file_hashes:
+  .agents/skills/flight-recorder-benchmark/SKILL.md: sha256:352a6763519bcb664aa98a18376c3c673b997bb2be1efa127dfedf426c125f27
+  .agents/skills/flight-recorder-telemetry/SKILL.md: sha256:481e34ccb65595f1e1af4ef01022d6006c447541078c0fe500ca9ad90ad8aed7

@@ -29,13 +29,15 @@ async function main(): Promise<void> {
 }
 
 function printHelp(): void {
-  console.log(`agent-bench
+  console.log(`Avionics Flight Recorder
+
+Usage: flight-recorder <command> [options]
 
 Commands:
   run      Run a controlled agent benchmark
   run record  Record metadata and telemetry JSONL as benchmark evidence
   compare  Compare baseline and candidate summary.json files
-  report   Generate Markdown report from summary.json
+  report   Generate a Flight Recorder Markdown report from summary.json
 `);
 }
 

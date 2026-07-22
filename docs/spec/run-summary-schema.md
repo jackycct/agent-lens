@@ -2,9 +2,9 @@
 
 `summary.json` is the canonical normalized evidence artifact for one agent run.
 The runtime TypeScript contract is `RunSummary` in
-`agentic-system-telemetry/packages/agent-bench/src/core/schema.ts`. The JSON
+`flight-recorder/packages/flight-recorder/src/core/schema.ts`. The JSON
 Schema file is
-`agentic-system-telemetry/packages/agent-bench/src/schemas/agent-run.schema.json`.
+`flight-recorder/packages/flight-recorder/src/schemas/agent-run.schema.json`.
 
 ## Required Sections
 
@@ -37,7 +37,7 @@ Example:
     "orchestrated": true,
     "repo_intelligence": true,
     "context_pack": true,
-    "agent_lens_telemetry": true
+    "flight_recorder_telemetry": true
   }
 }
 ```

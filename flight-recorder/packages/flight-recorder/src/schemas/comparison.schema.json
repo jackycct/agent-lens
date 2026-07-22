@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://agent-lens.local/schemas/comparison.schema.json",
-  "title": "AgentLens Comparison Summary",
+  "$id": "https://avionics.local/flight-recorder/schemas/comparison.schema.json",
+  "title": "Avionics Flight Recorder Comparison Summary",
   "type": "object",
   "additionalProperties": false,
   "required": [

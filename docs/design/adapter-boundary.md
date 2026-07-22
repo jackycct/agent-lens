@@ -1,7 +1,7 @@
 # Adapter Boundary
 
 Agent adapters isolate vendor-specific execution and telemetry parsing from the
-AgentLens evidence model.
+Flight Recorder evidence model.
 
 ## Interface
 
@@ -38,7 +38,7 @@ Adapters must not:
 
 ## Core Responsibilities
 
-Core AgentLens code owns:
+Core Flight Recorder code owns:
 
 - artifact paths and run directory layout
 - required run summary fields

@@ -1,6 +1,6 @@
 # Reports, PRs, And Jira
 
-AgentLens reports are Markdown review artifacts. Use them to summarize
+Flight Recorder reports are Markdown review artifacts. Use them to summarize
 benchmark evidence without committing generated run output.
 
 ## Generate A Report
@@ -8,8 +8,8 @@ benchmark evidence without committing generated run output.
 Run from the package workspace after a benchmark summary exists:
 
 ```powershell
-cd agentic-system-telemetry/packages/agent-bench
-agent-bench report --summary ../../../runs/2026-06-06/<run_id>/summary.json
+cd flight-recorder/packages/flight-recorder
+flight-recorder report --summary ../../../runs/2026-06-06/<run_id>/summary.json
 ```
 
 The report command prints Markdown. Attach that Markdown to the relevant pull

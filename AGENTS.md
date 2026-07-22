@@ -1,14 +1,14 @@
-# AgentLens Agent Instructions
+# Avionics Flight Recorder Agent Instructions
 
-Use this file as the coding-agent entrypoint for AgentLens.
+Use this file as the coding-agent entrypoint for Avionics Flight Recorder.
 
 ## Purpose
 
-AgentLens is the evidence layer for agentic engineering systems. It owns
+Avionics Flight Recorder is the evidence layer for agentic engineering systems. It owns
 telemetry capture, normalized run summaries, metric taxonomy, comparison
 reports, benchmark history, and adoption recommendation evidence.
 
-AgentLens does not own Avionics orchestration, Codebrain repository
+Flight Recorder does not own Avionics orchestration, Codebrain repository
 understanding, or Stenography context compression. Integrate with those systems
 through metadata, telemetry inputs, and artifacts.
 
@@ -37,10 +37,10 @@ For package or schema changes, run `make verify`.
 
 ## Change Rules
 
-- Keep changes small and scoped to AgentLens evidence capture and reporting.
+- Keep changes small and scoped to Flight Recorder evidence capture and reporting.
 - Preserve generated-output boundaries: do not commit `node_modules`, `dist`,
   `runs`, local logs, credentials, or generated auth files.
 - Keep TokenTelemetry reuse behind
-  `agentic-system-telemetry/packages/agent-bench/src/telemetry/tokentelemetry-adapter.ts`.
-- Preserve MIT attribution in `agentic-system-telemetry/NOTICE` if copied or
+  `flight-recorder/packages/flight-recorder/src/telemetry/tokentelemetry-adapter.ts`.
+- Preserve MIT attribution in `flight-recorder/NOTICE` if copied or
   modified third-party code is introduced.

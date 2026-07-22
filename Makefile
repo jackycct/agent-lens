@@ -69,17 +69,17 @@ dev-tools: ## Check and install optional development tools (gh, acli, codex, agy
 
 install: doctor ## Install project dependencies
 	@echo "Installing project dependencies..."
-	cd agentic-system-telemetry/packages/agent-bench && $(NPM) install
+	cd flight-recorder/packages/flight-recorder && $(NPM) install
 	@echo "Install complete."
 
 build: install ## Build project artifacts
 	@echo "Building project..."
-	cd agentic-system-telemetry/packages/agent-bench && $(NPM) run build --if-present
+	cd flight-recorder/packages/flight-recorder && $(NPM) run build --if-present
 	@echo "Build complete."
 
 test: install ## Run project tests
 	@echo "Running tests..."
-	cd agentic-system-telemetry/packages/agent-bench && $(NPM) test --if-present
+	cd flight-recorder/packages/flight-recorder && $(NPM) test --if-present
 	@echo "Test step complete."
 
 skill-verify: ## Validate packaged skills
@@ -92,8 +92,8 @@ verify: doctor install build test skill-verify ## Run full verification workflow
 
 clean: ## Remove generated output
 	@echo "Cleaning generated files..."
-	rm -rf runs dist agentic-system-telemetry/packages/agent-bench/dist || true
-	@echo "Removed runs/, dist/, and agent-bench/dist"
+	rm -rf runs dist flight-recorder/packages/flight-recorder/dist || true
+	@echo "Removed runs/, dist/, and flight-recorder/dist"
 	@echo "Clean complete."
 
 reset: clean install ## Clean generated files and reinstall dependencies

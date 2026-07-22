@@ -1,16 +1,16 @@
-# Agentic-System Telemetry
+# Avionics Flight Recorder Core
 
-Agentic-System Telemetry is the AgentLens measurement foundation. It provides:
+Flight Recorder Core is the Flight Recorder measurement foundation. It provides:
 
 - A reusable skill for benchmark methodology.
-- `agent-bench`, a CLI for controlled agent runs.
+- `flight-recorder`, a CLI for controlled agent runs.
 - Stable normalized schemas for run and comparison artifacts.
 - Markdown reports for PRs, Jira, engineering reviews, and experiment logs.
 
 ## Single Run
 
 ```bash
-agent-bench run \
+flight-recorder run \
   --agent codex \
   --repo /path/to/repo \
   --prompt prompts/edit-task.md \
@@ -29,7 +29,7 @@ Optional controls:
 ## Baseline Vs Candidate
 
 ```bash
-agent-bench compare \
+flight-recorder compare \
   --baseline runs/2026-06-06/<baseline>/summary.json \
   --candidate runs/2026-06-06/<candidate>/summary.json
 ```
@@ -37,7 +37,7 @@ agent-bench compare \
 ## Report
 
 ```bash
-agent-bench report --summary runs/2026-06-06/<run_id>/summary.json
+flight-recorder report --summary runs/2026-06-06/<run_id>/summary.json
 ```
 
 Reports can be attached to pull requests, Jira tickets, engineering reviews,
@@ -45,7 +45,7 @@ and experiment logs. See `../docs/wiki/reports-and-jira.md`.
 
 ## Skill Packaging
 
-The packaged skill lives at `skills/agentic-system-telemetry/SKILL.md`.
+The packaged skill lives at `skills/flight-recorder/SKILL.md`.
 Packaging requirements and validation steps are documented in
 `../docs/wiki/skill-packaging.md`.
 

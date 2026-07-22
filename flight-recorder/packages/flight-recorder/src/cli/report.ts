@@ -12,7 +12,7 @@ export async function reportCommandHandler(args: Record<string, string | boolean
 }
 
 export function renderRunReport(summary: RunSummary): string {
-  return `# Agent Benchmark Report
+  return `# Avionics Flight Recorder Report
 
 ## 1. Summary
 

@@ -1,15 +1,19 @@
-# AgentLens
+# Avionics Flight Recorder
 
-AgentLens is a skill-first telemetry and benchmark toolkit for coding agents.
+Avionics Flight Recorder is the evidence and observability component of the
+Avionics agent-SDLC platform. It is a skill-first telemetry and benchmark
+toolkit for coding agents.
+
+See [the migration guide](docs/migration.md) for the clean-break naming policy.
 It measures agentic systems across speed, token usage, tool behavior, diffs,
 tests, and outcome evidence.
 
 This repository currently contains the first open-source foundation:
 
-- `agentic-system-telemetry/skills/agentic-system-telemetry/SKILL.md`
-- `.apm/skills/agent-lens-telemetry/SKILL.md`
-- `.apm/skills/agent-lens-benchmark/SKILL.md`
-- `agentic-system-telemetry/packages/agent-bench`
+- `flight-recorder/skills/flight-recorder/SKILL.md`
+- `.apm/skills/flight-recorder-telemetry/SKILL.md`
+- `.apm/skills/flight-recorder-benchmark/SKILL.md`
+- `flight-recorder/packages/flight-recorder`
 
 ## Contributor Wiki
 
@@ -19,7 +23,7 @@ troubleshooting are documented in `docs/wiki/README.md`.
 ## Architecture And Specs
 
 - `AGENTS.md`: coding-agent entrypoint and validation guidance.
-- `docs/architecture.md`: AgentLens boundaries, runtime flow, and adapter model.
+- `docs/architecture.md`: Flight Recorder boundaries, runtime flow, and adapter model.
 - `docs/design/adapter-boundary.md`: adapter responsibilities and exclusions.
 - `docs/benchmarks/portfolio.md`: benchmark track strategy and shared scenario
   metadata.
@@ -33,7 +37,7 @@ troubleshooting are documented in `docs/wiki/README.md`.
 ## Install
 
 ```bash
-cd agentic-system-telemetry/packages/agent-bench
+cd flight-recorder/packages/flight-recorder
 npm install
 npm run build
 npm link
@@ -57,16 +61,16 @@ choco install make -y
 
 ## Uninstall
 
-Remove the linked `agent-bench` command:
+Remove the linked Flight Recorder package:
 
 ```bash
-npm unlink -g @agent-lens/agent-bench
+npm unlink -g @avionics/flight-recorder
 ```
 
 Remove local install/build artifacts:
 
 ```bash
-cd agentic-system-telemetry/packages/agent-bench
+cd flight-recorder/packages/flight-recorder
 Remove-Item -LiteralPath node_modules,dist -Recurse -Force
 ```
 
@@ -85,7 +89,7 @@ npm uninstall -g @openai/codex
 ## Run A Codex Benchmark
 
 ```bash
-agent-bench run \
+flight-recorder run \
   --agent codex \
   --model gpt-5.5 \
   --sandbox workspace-write \
@@ -110,7 +114,7 @@ The runner writes artifacts under `runs/<yyyy-mm-dd>/<run_id>/`:
 ## Compare Runs
 
 ```bash
-agent-bench compare \
+flight-recorder compare \
   --baseline runs/2026-06-06/baseline/summary.json \
   --candidate runs/2026-06-06/candidate/summary.json
 ```
@@ -118,7 +122,7 @@ agent-bench compare \
 Directory inputs are also supported:
 
 ```bash
-agent-bench compare runs/2026-06-06/baseline runs/2026-06-06/candidate
+flight-recorder compare runs/2026-06-06/baseline runs/2026-06-06/candidate
 ```
 
 This creates `comparison.json` and `comparison.md` next to the candidate
@@ -127,7 +131,7 @@ summary unless `--out-dir` is supplied.
 ## Generate A Report
 
 ```bash
-agent-bench report --summary runs/2026-06-06/<run_id>/summary.json
+flight-recorder report --summary runs/2026-06-06/<run_id>/summary.json
 ```
 
 The Markdown report is suitable for pull request comments, Jira tickets,
@@ -136,7 +140,7 @@ engineering review, or experiment logs.
 ## Record External Experiment Evidence
 
 An adapter, tool, or external orchestrator can pass run metadata and telemetry
-JSONL without AgentLens depending on that upstream system:
+JSONL without Flight Recorder depending on that upstream system:
 
 ```json
 {
@@ -148,7 +152,7 @@ JSONL without AgentLens depending on that upstream system:
     "repo_intelligence": true,
     "impact_analysis": true,
     "context_pack": true,
-    "agent_lens_telemetry": true
+    "flight_recorder_telemetry": true
   },
   "eval": {
     "type": "pytest",
@@ -160,7 +164,7 @@ JSONL without AgentLens depending on that upstream system:
 Record it with:
 
 ```bash
-agent-bench run record --metadata run.json --telemetry telemetry.jsonl
+flight-recorder run record --metadata run.json --telemetry telemetry.jsonl
 ```
 
 `summary.json` includes speed, token, cost, tool, diff, and eval fields. Failed
@@ -168,14 +172,14 @@ runs are kept in reports and comparisons.
 
 ## APM Packaging
 
-AgentLens exposes APM-first agent assets at:
+Flight Recorder exposes APM-first agent assets at:
 
 ```text
 .apm/
   instructions/
   skills/
-    agent-lens-telemetry/
-    agent-lens-benchmark/
+    flight-recorder-telemetry/
+    flight-recorder-benchmark/
 ```
 
 Install package assets with Microsoft Agent Package Manager:
