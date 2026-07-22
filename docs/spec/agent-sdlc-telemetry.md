@@ -36,12 +36,48 @@ token, and tool attributes. `avionics.*` attributes are reserved for the run
 identifier, evidence completeness, and artifact references where no upstream
 convention exists.
 
+Concrete OTLP event example (attributes are shown as JSON for readability):
+
+```json
+{
+  "traceId": "4bf92f3577b34da6a3ce929d0e0e4736",
+  "spanId": "00f067aa0ba902b7",
+  "name": "agent.tool.call",
+  "attributes": {
+    "avionics.run.id": "run-123",
+    "event.name": "tool.call",
+    "gen_ai.tool.name": "read_file",
+    "avionics.artifact.ref": "raw.jsonl"
+  }
+}
+```
+
 ## Metric Derivation
 
 `tool_call_count`, file-read/write counters, failures, retries, timing, token,
 and cost fields derive from `tool.call`, `context.read`/`file.edit`, `command`,
 `cost`, and `outcome` events. Diff and eval fields derive from `diff` and
 `test` events. A missing source event produces `null`, not zero.
+
+| Summary metric group | Event source or derived calculation |
+| --- | --- |
+| speed | lifecycle timestamps; `command`, `test`, and `file.edit` duration |
+| tokens/cost | `cost` metrics or GenAI usage attributes |
+| tool behaviour | `tool.call`, `context.read`, `search`, and `file.edit` counts |
+| diff | `diff` attributes and its referenced artifact |
+| eval | `test` outcome, counters, and referenced log |
+| success | terminal `outcome` combined with declared eval result |
+
+| Normalized field(s) | Exact event source |
+| --- | --- |
+| `wall_ms`, `tool_execution_ms`, `eval_execution_ms` | lifecycle, `tool.call`, and `test` timestamps/durations |
+| `time_to_first_edit_ms`, `time_to_first_successful_eval_ms` | first `file.edit` and passing `test` timestamps |
+| token and cost fields | `cost.metrics` or GenAI usage attributes |
+| `tool_call_count`, `tool_calls_by_type` | `tool.call` events grouped by tool name |
+| file/read/write, retry, and search ratio fields | `context.read`, `search`, `file.edit`, and ordered `tool.call` events |
+| diff fields | `diff` attributes and referenced diff artifact |
+| eval/test fields | terminal `test` event and referenced eval log |
+| `exit_code`, `success` | terminal `outcome` and declared eval outcome |
 
 ## Redaction
 
