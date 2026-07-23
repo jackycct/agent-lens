@@ -11,7 +11,7 @@ export class CopilotAdapter implements AgentAdapter {
     // command can be overridden for enterprise wrappers or preview builds.
     const args = ["-p", input.prompt, "--output-format", "json"];
     if (input.model) args.push("--model", input.model);
-    const result = await runCommand(process.env.FLIGHT_RECORDER_COPILOT_COMMAND ?? "copilot", args, { cwd: input.repoPath });
+    const result = await runCommand(process.env.FLIGHT_RECORDER_COPILOT_COMMAND ?? "copilot", args, { cwd: input.repoPath, timeoutMs: input.timeoutMs ?? undefined });
     const metrics = parseCopilotJson(result.stdout);
     return {
       stdout: result.stdout,

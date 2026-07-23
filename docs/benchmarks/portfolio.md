@@ -106,8 +106,40 @@ comparisons can explain which capabilities changed.
 - Avoid adoption claims unless the result is backed by reproducible Flight Recorder
   artifacts and the relevant failure modes are documented.
 
-## Non-Goals
+## Executable Packs And Scorecards
 
-This portfolio does not implement every benchmark runner. It defines the first
-strategy and metadata contract so `flight-recorder` can record and compare evidence
-consistently as tracks are added.
+Versioned starter packs live in `flight-recorder/benchmarks/`. Each `manifest.json`
+is portable JSON and records the task identity, source/base ref, setup commands,
+prompt, allowed tools, validation contract, required artifacts, timeout, and license.
+
+Run a scenario from a clean checkout with:
+
+```bash
+flight-recorder benchmark run --manifest flight-recorder/benchmarks/programbench-json-select/manifest.json \
+  --agent codex --repo <clean-task-checkout> --variant baseline --reset
+```
+
+The source-aware `swe-style-issue-fix` pack uses the same command. The runner
+executes setup, then records the manifest identity, base ref, allowed tools, and
+timeout in `summary.json` features. It intentionally does not clone or reset an
+unspecified repository: callers supply the clean checkout under test.
+
+Aggregate repeated summaries with:
+
+```bash
+flight-recorder benchmark scorecard runs/.../summary.json runs/.../summary.json
+```
+
+This writes machine-readable `scorecard.json` and a Markdown report. The scorecard
+keeps raw component measures visible and reports its weights, sample mean, sample
+standard deviation, missing evidence, failed runs, and partial runs. Five repeated
+runs is the minimum recommended sample before drawing a directional conclusion.
+It blocks aggregate scores when scenario, base ref, validation contract, or
+capability evidence differ; the individual runs remain in the report.
+
+## Adding A Scenario
+
+Copy either starter pack, assign a new stable `id`, pin `source.base_ref`, provide a
+task-specific prompt and validation command, and keep licensing metadata complete.
+Run `npm test` in `flight-recorder/packages/flight-recorder`; the manifest tests
+exercise both public starter packs and scorecard comparability guards.

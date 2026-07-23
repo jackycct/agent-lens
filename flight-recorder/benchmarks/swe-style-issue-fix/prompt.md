@@ -1,0 +1,1 @@
+Resolve the supplied issue in the checked-out source repository. Identify the smallest correct change, add a regression test, and run the manifest validation command. Keep the patch focused on the stated issue.

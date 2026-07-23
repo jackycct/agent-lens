@@ -12,7 +12,7 @@ export class ClaudeAdapter implements AgentAdapter {
     const args = ["--print", "--output-format", "stream-json", "--verbose"];
     if (input.model) args.push("--model", input.model);
     args.push(input.prompt);
-    const result = await runCommand(process.env.FLIGHT_RECORDER_CLAUDE_COMMAND ?? "claude", args, { cwd: input.repoPath });
+    const result = await runCommand(process.env.FLIGHT_RECORDER_CLAUDE_COMMAND ?? "claude", args, { cwd: input.repoPath, timeoutMs: input.timeoutMs ?? undefined });
     const metrics = parseClaudeJsonl(result.stdout);
     return {
       stdout: result.stdout,

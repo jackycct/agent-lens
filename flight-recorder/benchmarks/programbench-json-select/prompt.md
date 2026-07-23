@@ -1,0 +1,1 @@
+Implement the requested JSON-selection behavior in the checked-out task repository. Preserve existing command-line behavior and add focused tests. Run the manifest validation command before finishing.

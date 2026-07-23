@@ -179,6 +179,7 @@ export async function runCommandHandler(args: Record<string, string | boolean>):
   const model = optionalString(args, "model");
   const sandbox = optionalString(args, "sandbox");
   const testCommand = optionalString(args, "test-command");
+  const timeoutMs = optionalPositiveInteger(args, "timeout-ms");
   const outDir = resolve(optionalString(args, "out-dir") ?? "runs");
   const shouldReset = args.reset === true;
 
@@ -193,7 +194,7 @@ export async function runCommandHandler(args: Record<string, string | boolean>):
   const started = new Date();
   const startMs = performance.now();
   const adapter = getAdapter(agent);
-  const agentResult = await adapter.run({ repoPath, promptPath, prompt, model, sandbox });
+  const agentResult = await adapter.run({ repoPath, promptPath, prompt, model, sandbox, timeoutMs });
   const telemetrySources = await adapter.discoverTelemetry?.({ repoPath, promptPath, prompt, model, sandbox }) ?? [];
   const discoveredMetrics = telemetrySources.length && adapter.parseTelemetry
     ? await adapter.parseTelemetry(telemetrySources)
@@ -210,7 +211,7 @@ export async function runCommandHandler(args: Record<string, string | boolean>):
   let testsPassed: boolean | null = null;
   let testLog = "";
   if (testCommand) {
-    const testResult = await runCommand(testCommand, [], { cwd: repoPath, shell: true });
+    const testResult = await runCommand(testCommand, [], { cwd: repoPath, shell: true, timeoutMs });
     testExitCode = testResult.exitCode;
     testWallMs = testResult.wallMs;
     testsPassed = testResult.exitCode === 0;

@@ -12,7 +12,7 @@ export class CodexAdapter implements AgentAdapter {
     const args = codexArgs(input);
 
     const command = codexCommand();
-    const result = await runCommand(command.command, [...command.prefixArgs, ...args], { cwd: input.repoPath });
+    const result = await runCommand(command.command, [...command.prefixArgs, ...args], { cwd: input.repoPath, timeoutMs: input.timeoutMs ?? undefined });
     const rawEvents = result.stdout;
     const metrics = parseCodexJsonl(rawEvents);
     return {
