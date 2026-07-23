@@ -51,6 +51,10 @@ Each variant row includes:
 `features` preserves optional tool, orchestration, and upstream state so
 comparison readers can see which capabilities differed between variants.
 
+When `capability_*` features differ, token, cost, and tool telemetry are not
+directly comparable. Reports must state that limitation and recommendations
+must require manual review instead of claiming an evidence-based efficiency win.
+
 ## Recommendation Semantics
 
 Recommendations are heuristic evidence, not automatic approval. They consider:

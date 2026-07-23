@@ -1,4 +1,4 @@
-import type { AgentName, NormalizedMetrics } from "../core/schema.js";
+import type { AgentName, FeatureToggles, NormalizedMetrics } from "../core/schema.js";
 
 export interface AgentRunInput {
   repoPath: string;
@@ -14,6 +14,9 @@ export interface AgentRunResult {
   rawEvents: string;
   exitCode: number;
   metrics: Partial<NormalizedMetrics>;
+  /** Evidence that this adapter could observe for this run. */
+  capabilities: FeatureToggles;
+  model?: string | null;
 }
 
 export interface TelemetrySource {

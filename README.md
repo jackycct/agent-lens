@@ -218,8 +218,9 @@ interface AgentAdapter {
 }
 ```
 
-The first complete adapter is `codex`. Claude Code and GitHub Copilot stubs
-are included behind the same boundary.
+Codex, Claude Code, and GitHub Copilot CLI adapters share this boundary. Each
+adapter records capability flags so unavailable vendor evidence is never
+mistaken for zero activity.
 
 ## TokenTelemetry Reuse
 
@@ -232,5 +233,8 @@ TokenTelemetry code, preserve MIT attribution in `NOTICE`.
 
 - Token and cost fields are nullable when agent output does not expose them.
 - Codex JSONL parsing is best-effort and intentionally conservative.
-- Claude Code and Copilot adapters are placeholders in this first version.
+- Claude Code requires its authenticated `claude` CLI and supports non-interactive
+  `--print --output-format stream-json` sessions. GitHub Copilot requires its
+  authenticated `copilot` CLI with programmatic JSON output; hosted coding-agent
+  web sessions are not accessible through a stable public export API.
 - Long-term storage and dashboards are non-goals for this repository.

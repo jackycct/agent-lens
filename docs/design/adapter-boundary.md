@@ -26,6 +26,7 @@ Adapters may:
 - discover local telemetry files produced by the agent
 - parse agent-native telemetry into partial normalized metrics
 - return the agent process exit code
+- declare per-run `capability_*` flags for evidence the vendor can expose
 
 Adapters must not:
 
@@ -51,6 +52,10 @@ Core Flight Recorder code owns:
 
 Raw agent events should be preserved even when parsing is incomplete. Normalized
 metrics are best-effort and may be `null` when evidence is unavailable.
+
+Capability flags make that distinction visible to report consumers. For example,
+`capability_tokens=false` means token evidence was unavailable; it must not turn
+`total_tokens` into `0` or support a token-efficiency recommendation.
 
 If TokenTelemetry behavior is reused, keep log-location and parser knowledge
 behind `telemetry/tokentelemetry-adapter.ts`.
