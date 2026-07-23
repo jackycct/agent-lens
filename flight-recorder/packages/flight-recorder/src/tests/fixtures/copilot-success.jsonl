@@ -1,0 +1,4 @@
+{"type":"tool_call","name":"read_file"}
+{"type":"tool_call","name":"apply_patch"}
+{"usage":{"input_tokens":30,"output_tokens":10}}
+{"type":"validation","name":"npm_test","status":"success"}

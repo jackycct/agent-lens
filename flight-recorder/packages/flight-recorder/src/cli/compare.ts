@@ -67,6 +67,7 @@ export function renderComparisonMarkdown(
 ${comparison.recommendation}
 
 Failed runs are included in this report and must be inspected before adoption decisions.
+${capabilityMismatch(baseline, candidate) ? "\n> Evidence availability differs between these agents. Token, cost, and tool deltas marked `n/a` are not evidence of lower activity; review the capability flags before comparing them.\n" : ""}
 
 ## Run Metadata
 
@@ -157,6 +158,9 @@ function recommend(
   wallDelta: number,
   tokenDelta: number | null
 ): string {
+  if (capabilityMismatch(baseline, candidate)) {
+    return "Recommendation: review manually; evidence availability differs between the compared agents.";
+  }
   if (!candidate.success && baseline.success) return "Recommendation: do not promote candidate; baseline succeeds and candidate fails.";
   if (candidate.success && !baseline.success) return "Recommendation: promote candidate; candidate succeeds where baseline fails.";
   const faster = wallDelta < 0;
@@ -164,6 +168,11 @@ function recommend(
   if (candidate.success && (faster || cheaper)) return "Recommendation: promote candidate for broader benchmark coverage.";
   if (candidate.success === baseline.success) return "Recommendation: keep testing; evidence is neutral or incomplete.";
   return "Recommendation: review manually before promotion.";
+}
+
+function capabilityMismatch(baseline: RunSummary, candidate: RunSummary): boolean {
+  const keys = new Set([...Object.keys(baseline.features ?? {}), ...Object.keys(candidate.features ?? {})]);
+  return [...keys].some((key) => key.startsWith("capability_") && baseline.features?.[key] !== candidate.features?.[key]);
 }
 
 function formatNullable(value: number | null): string {

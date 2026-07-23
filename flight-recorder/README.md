@@ -59,6 +59,26 @@ Interrupted, timed-out, crashed, and failed sessions retain a valid artifact
 directory and `summary.json`. The wrapper uses Node process APIs and has automated
 fixtures that run on Windows, macOS, and Linux.
 
+## Agent Adapters
+
+`flight-recorder run --agent claude` invokes the locally installed, authenticated
+Claude Code CLI in non-interactive stream-JSON mode. `flight-recorder run --agent
+copilot` invokes the locally installed, authenticated GitHub Copilot CLI in its
+programmatic JSON mode. Both require a version of the vendor CLI that supports
+those modes; use `FLIGHT_RECORDER_CLAUDE_COMMAND` or
+`FLIGHT_RECORDER_COPILOT_COMMAND` for an enterprise wrapper or alternate binary.
+
+For session ingestion, set `FLIGHT_RECORDER_CLAUDE_TELEMETRY_PATHS` or
+`FLIGHT_RECORDER_COPILOT_TELEMETRY_PATHS` to one or more JSONL files (separated
+by the platform path delimiter) before running the benchmark. The adapters do
+not read vendor credential stores, browser sessions, or hosted Copilot coding
+agent transcripts. Authentication remains entirely with the vendor CLI.
+
+Every summary includes `capability_*` feature flags. A `false` flag means the
+vendor did not expose that evidence; the related metric stays `null`, never `0`.
+Comparison reports warn and avoid an automatic promotion recommendation when
+capability availability differs between runs.
+
 ## Baseline Vs Candidate
 
 ```bash

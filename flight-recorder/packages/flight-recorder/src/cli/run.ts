@@ -194,6 +194,10 @@ export async function runCommandHandler(args: Record<string, string | boolean>):
   const startMs = performance.now();
   const adapter = getAdapter(agent);
   const agentResult = await adapter.run({ repoPath, promptPath, prompt, model, sandbox });
+  const telemetrySources = await adapter.discoverTelemetry?.({ repoPath, promptPath, prompt, model, sandbox }) ?? [];
+  const discoveredMetrics = telemetrySources.length && adapter.parseTelemetry
+    ? await adapter.parseTelemetry(telemetrySources)
+    : {};
   const ended = new Date();
   const wallMs = Math.round(performance.now() - startMs);
 
@@ -213,7 +217,7 @@ export async function runCommandHandler(args: Record<string, string | boolean>):
     testLog = joinLogs(testResult.stdout, testResult.stderr);
   }
 
-  const metrics = { ...emptyMetrics(), ...agentResult.metrics };
+  const metrics = mergeMetricEvidence(agentResult.metrics, discoveredMetrics);
   const evalLog = testLog;
   const evalStats = parseEvalLog(evalLog);
   const summary = buildSummary({
@@ -221,10 +225,10 @@ export async function runCommandHandler(args: Record<string, string | boolean>):
     experiment_id: optionalString(args, "experiment-id"),
     agent,
     agent_version: null,
-    model,
+    model: agentResult.model ?? model,
     scenario,
     variant,
-    features: parseFeatures(optionalString(args, "features")),
+    features: { ...parseFeatures(optionalString(args, "features")), ...agentResult.capabilities },
     eval: testCommand ? { type: "command", command: testCommand } : null,
     repo_path: repoPath,
     commit_sha: commitSha,
@@ -259,11 +263,28 @@ export async function runCommandHandler(args: Record<string, string | boolean>):
     prompt_path: promptPath,
     test_command: testCommand,
     reset: shouldReset,
-    adapter: adapter.name
+    adapter: adapter.name,
+    telemetry_sources: telemetrySources.map((source) => ({ kind: source.kind, path: source.path }))
   });
   await writeJsonArtifact(runDir, "summary.json", summary);
 
   console.log(`summary: ${runDir}/summary.json`);
+}
+
+function mergeMetricEvidence(
+  primary: Partial<NormalizedMetrics>,
+  discovered: Partial<NormalizedMetrics>
+): NormalizedMetrics {
+  const merged: NormalizedMetrics = { ...emptyMetrics(), ...primary };
+  for (const key of Object.keys(discovered) as Array<keyof NormalizedMetrics>) {
+    const value = discovered[key];
+    if (key === "toolCallsByType" && value && typeof value === "object") {
+      merged.toolCallsByType = { ...merged.toolCallsByType, ...value };
+    } else if (value != null) {
+      Object.assign(merged, { [key]: value });
+    }
+  }
+  return merged;
 }
 
 export async function recordRunCommandHandler(args: Record<string, string | boolean>): Promise<void> {

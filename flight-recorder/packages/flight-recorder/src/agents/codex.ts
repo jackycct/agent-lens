@@ -14,12 +14,22 @@ export class CodexAdapter implements AgentAdapter {
     const command = codexCommand();
     const result = await runCommand(command.command, [...command.prefixArgs, ...args], { cwd: input.repoPath });
     const rawEvents = result.stdout;
+    const metrics = parseCodexJsonl(rawEvents);
     return {
       stdout: result.stdout,
       stderr: result.stderr,
       rawEvents,
       exitCode: result.exitCode,
-      metrics: parseCodexJsonl(rawEvents)
+      metrics,
+      capabilities: {
+        capability_lifecycle: true,
+        capability_model_identity: input.model != null,
+        capability_tokens: metrics.totalTokens != null,
+        capability_tool_calls: metrics.toolCallCount != null,
+        capability_file_operations: metrics.fileReadCount != null || metrics.fileWriteCount != null,
+        capability_cost: metrics.costUsd != null
+      },
+      model: input.model
     };
   }
 }

@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { compareSummaries } from "../../cli/compare.js";
+import { compareSummaries, renderComparisonMarkdown } from "../../cli/compare.js";
 import type { RunSummary } from "../../core/schema.js";
 
 const baseSummary: RunSummary = {
@@ -91,4 +91,12 @@ test("compareSummaries computes deltas and promotion recommendation", () => {
   assert.equal(comparison.diff_lines_delta, -11);
   assert.equal(comparison.variants.length, 2);
   assert.match(comparison.recommendation, /promote candidate/i);
+});
+
+test("compare warns when capability evidence differs", () => {
+  const baseline = { ...baseSummary, features: { capability_tokens: true } };
+  const candidate = { ...baseSummary, run_id: "candidate", features: { capability_tokens: false } };
+  const comparison = compareSummaries(baseline, candidate);
+  assert.match(comparison.recommendation, /evidence availability differs/);
+  assert.match(renderComparisonMarkdown(comparison, baseline, candidate), /Evidence availability differs/);
 });

@@ -84,6 +84,14 @@ Metric fields are nullable when unavailable. The canonical TypeScript type is
 `NormalizedMetrics` in
 `flight-recorder/packages/flight-recorder/src/core/schema.ts`.
 
+## Adapter Capability Metadata
+
+Agent adapters add boolean `capability_*` entries to `features`, including
+`capability_lifecycle`, `capability_model_identity`, `capability_tokens`,
+`capability_tool_calls`, `capability_file_operations`, and `capability_cost`.
+`false` means the vendor did not expose the evidence and the associated metrics
+remain `null`; it never means no activity occurred.
+
 ## Output
 
 After parsing telemetry and optional eval output, Flight Recorder writes the normalized
