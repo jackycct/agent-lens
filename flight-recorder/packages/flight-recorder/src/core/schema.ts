@@ -134,6 +134,43 @@ export interface ComparisonSummary {
   recommendation: string;
 }
 
+export type BenchmarkTrack = "programbench" | "swe_bench_style" | "multi_swe" | "terminal_bench" | "enterprise";
+
+/** A portable, versioned contract for one executable benchmark scenario. */
+export interface BenchmarkScenarioManifest {
+  schema_version: "1.0";
+  id: string;
+  track: BenchmarkTrack;
+  source: { repository: string; base_ref: string };
+  setup: string[];
+  prompt: string;
+  allowed_tools: string[];
+  validation: { command: string; type?: string };
+  expected_artifacts: string[];
+  timeout_ms: number;
+  licensing: { license: string; source_url?: string };
+}
+
+export interface ScorecardRun {
+  run_id: string;
+  scenario: string;
+  base_ref: string | null;
+  environment: string | null;
+  success: boolean;
+  partial: boolean;
+  components: Record<string, number | null>;
+  score: number | null;
+  missing_evidence: string[];
+}
+
+export interface ScorecardReport {
+  schema_version: "1.0";
+  runs: ScorecardRun[];
+  comparability: { compatible: boolean; warnings: string[] };
+  weighting: Record<string, number>;
+  statistics: { run_count: number; successful_runs: number; failed_runs: number; partial_runs: number; minimum_recommended_samples: number; score_mean: number | null; score_standard_deviation: number | null };
+}
+
 export interface VariantComparison {
   run_id: string;
   variant: string;

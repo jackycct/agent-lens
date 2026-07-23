@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import { compareCommandHandler } from "./compare.js";
+import { benchmarkRunCommandHandler, scorecardCommandHandler } from "./benchmark.js";
 import { parseArgs } from "./args.js";
 import { reportCommandHandler } from "./report.js";
 import { recordCommandHandler, recordRunCommandHandler, runCommandHandler } from "./run.js";
@@ -25,6 +26,11 @@ async function main(): Promise<void> {
     case "report":
       await reportCommandHandler(args);
       break;
+    case "benchmark":
+      if (subcommand === "run") await benchmarkRunCommandHandler(args);
+      else if (subcommand === "scorecard") await scorecardCommandHandler(args);
+      else throw new Error("benchmark requires run or scorecard");
+      break;
     default:
       printHelp();
       process.exit(command ? 1 : 0);
@@ -42,6 +48,8 @@ Commands:
   record [options] -- <command>  Record a command without a metadata file
   compare  Compare baseline and candidate summary.json files
   report   Generate a Flight Recorder Markdown report from summary.json
+  benchmark run --manifest <path> --agent <agent>  Run a versioned benchmark pack scenario
+  benchmark scorecard <summaries...>  Aggregate repeated benchmark evidence
 `);
 }
 

@@ -6,6 +6,7 @@ export interface AgentRunInput {
   prompt: string;
   model: string | null;
   sandbox: string | null;
+  timeoutMs?: number | null;
 }
 
 export interface AgentRunResult {
