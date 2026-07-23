@@ -1,9 +1,9 @@
 import { randomUUID } from "node:crypto";
-import { copyFile, readFile } from "node:fs/promises";
+import { appendFile, copyFile, readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import { getAdapter } from "../agents/index.js";
 import { artifactMap, createRunDir, writeJsonArtifact, writeTextArtifact } from "../core/artifacts.js";
-import { currentCommit, gitDiff, gitDiffNumstat, parseNumstat, resetRepo } from "../core/git.js";
+import { currentBranch, currentCommit, gitDiff, gitDiffNumstat, parseNumstat, repositoryRoot, resetRepo } from "../core/git.js";
 import { sha256 } from "../core/hash.js";
 import { runCommand } from "../core/process.js";
 import type { AgentName, EvalMetadata, FeatureToggles, NormalizedMetrics, RunMetadataContract, RunSummary } from "../core/schema.js";
@@ -14,39 +14,154 @@ import { optionalString, positionals, requireString } from "./args.js";
 export async function recordCommandHandler(args: Record<string, string | boolean>): Promise<void> {
   const command = positionals(args);
   if (!command.length) throw new Error("record requires a command after --");
-  const repoPath = resolve(optionalString(args, "repo") ?? ".");
+  const requestedPath = resolve(optionalString(args, "repo") ?? ".");
+  const repoPath = await repositoryRoot(requestedPath) ?? requestedPath;
   const outDir = resolve(optionalString(args, "out-dir") ?? "runs");
+  const contentCapture = args["capture-content"] === true;
+  const timeoutMs = optionalPositiveInteger(args, "timeout-ms");
+  const evalCommand = optionalString(args, "eval-command");
+  const redactions = redactionPatterns(optionalString(args, "redact"));
+  const recordedCommand = contentCapture
+    ? redactCommand(command, redactions.patterns)
+    : [command[0], "[arguments omitted; content capture disabled]"];
+  const recordedEvalCommand = evalCommand
+    ? contentCapture ? redactText(evalCommand, redactions.patterns) : "[validation command omitted; content capture disabled]"
+    : null;
   const runId = randomUUID();
   const runDir = await createRunDir(outDir, runId);
   const artifacts = artifactMap();
+  const baseCommit = await currentCommit(repoPath);
+  const baseBranch = await currentBranch(repoPath);
+  const context = detectContext(command, baseBranch, optionalString(args, "issue"));
+  const environment = { platform: process.platform, arch: process.arch, node_version: process.version, cwd: repoPath };
   const started = new Date();
-  const result = await runCommand(command[0], command.slice(1), { cwd: repoPath });
+  await Promise.all([
+    writeTextArtifact(runDir, artifacts.stdout, contentCapture ? "" : "[content capture disabled]\n"),
+    writeTextArtifact(runDir, artifacts.stderr, contentCapture ? "" : "[content capture disabled]\n"),
+    writeTextArtifact(runDir, artifacts.raw_events, ""),
+    writeTextArtifact(runDir, artifacts.test_log, ""),
+    writeTextArtifact(runDir, artifacts.eval_log, "")
+  ]);
+  await writeJsonArtifact(runDir, "metadata.json", {
+    source: "record", run_id: runId, command: recordedCommand, lifecycle: "running", content_capture: contentCapture,
+    redaction: { enabled: true, custom_patterns: redactions.customCount }, environment,
+    base: { commit_sha: baseCommit, branch: baseBranch }, context
+  });
+  const controller = new AbortController();
+  let signalName: "SIGINT" | "SIGTERM" | null = null;
+  const interrupt = (name: "SIGINT" | "SIGTERM") => () => { signalName = name; controller.abort(); };
+  const onSigint = interrupt("SIGINT");
+  const onSigterm = interrupt("SIGTERM");
+  process.once("SIGINT", onSigint);
+  process.once("SIGTERM", onSigterm);
+  const interactive = process.stdin.isTTY === true && args["non-interactive"] !== true;
+  let captureWrites = Promise.resolve();
+  const appendCaptured = (file: string, chunk: string) => {
+    if (!contentCapture) return;
+    const safe = redactText(chunk, redactions.patterns);
+    captureWrites = captureWrites.then(() => appendFile(`${runDir}/${file}`, safe, "utf8"));
+  };
+  let result;
+  try {
+    result = await runCommand(command[0], command.slice(1), {
+      cwd: repoPath, timeoutMs, signal: controller.signal,
+      interactive,
+      onStdout: (chunk) => appendCaptured(artifacts.stdout, chunk),
+      onStderr: (chunk) => appendCaptured(artifacts.stderr, chunk)
+    });
+  } finally {
+    process.removeListener("SIGINT", onSigint);
+    process.removeListener("SIGTERM", onSigterm);
+  }
+  await captureWrites;
   const ended = new Date();
   const diff = await gitDiff(repoPath);
   const diffstat = await gitDiffNumstat(repoPath);
   const stats = parseNumstat(diffstat);
+  const headCommit = await currentCommit(repoPath);
+  const headBranch = await currentBranch(repoPath);
+  let evalResult: Awaited<ReturnType<typeof runCommand>> | null = null;
+  if (evalCommand && !result.interrupted && !result.timedOut) {
+    evalResult = await runCommand(evalCommand, [], { cwd: repoPath, shell: true, timeoutMs });
+    await writeTextArtifact(runDir, artifacts.test_log, redactText(joinLogs(evalResult.stdout, evalResult.stderr), redactions.patterns));
+    await writeTextArtifact(runDir, artifacts.eval_log, redactText(joinLogs(evalResult.stdout, evalResult.stderr), redactions.patterns));
+  }
+  const safeDiff = contentCapture ? redactText(diff, redactions.patterns) : "[content capture disabled]\n";
+  const safeDiffstat = contentCapture ? redactText(diffstat, redactions.patterns) : "[content capture disabled]\n";
   const summary = buildSummary({
     run_id: runId, experiment_id: optionalString(args, "issue"),
     agent: (optionalString(args, "agent") ?? inferAgent(command[0])) as AgentName,
-    agent_version: null, model: optionalString(args, "model"), scenario: optionalString(args, "task") ?? "recorded-session",
-    variant: "record", features: { content_capture: false }, eval: null, repo_path: repoPath,
-    commit_sha: await currentCommit(repoPath), prompt_hash: sha256(command.join(" ")),
+    agent_version: null, model: optionalString(args, "model") ?? context.model, scenario: optionalString(args, "task") ?? "recorded-session",
+    variant: "record", features: { content_capture: contentCapture, ci: context.ci }, eval: recordedEvalCommand ? { type: "command", command: recordedEvalCommand } : null, repo_path: repoPath,
+    commit_sha: baseCommit, prompt_hash: sha256(recordedCommand.join(" ")),
     started_at: started.toISOString(), ended_at: ended.toISOString(), wall_ms: result.wallMs,
-    exit_code: result.exitCode, success: result.exitCode === 0, tests_passed: null, test_exit_code: null,
-    test_wall_ms: null, diff_files: stats.files, diff_added: stats.added, diff_deleted: stats.deleted,
+    exit_code: result.exitCode, success: result.exitCode === 0 && (evalResult?.exitCode ?? 0) === 0,
+    tests_passed: evalResult ? evalResult.exitCode === 0 : null, test_exit_code: evalResult?.exitCode ?? null,
+    test_wall_ms: evalResult?.wallMs ?? null, diff_files: stats.files, diff_added: stats.added, diff_deleted: stats.deleted,
     production_files_changed: null, test_files_changed: null, unrelated_files_changed: null,
-    metrics: emptyMetrics(), eval_stats: parseEvalLog(""), artifacts
+    metrics: emptyMetrics(), eval_stats: parseEvalLog(evalResult ? joinLogs(evalResult.stdout, evalResult.stderr) : ""), artifacts
   });
-  await writeTextArtifact(runDir, artifacts.stdout, result.stdout);
-  await writeTextArtifact(runDir, artifacts.stderr, result.stderr);
-  await writeTextArtifact(runDir, artifacts.raw_events, "");
-  await writeTextArtifact(runDir, artifacts.diff, diff);
-  await writeTextArtifact(runDir, artifacts.diffstat, diffstat);
-  await writeTextArtifact(runDir, artifacts.test_log, "");
-  await writeTextArtifact(runDir, artifacts.eval_log, "");
-  await writeJsonArtifact(runDir, "metadata.json", { command, content_capture: false, source: "record" });
+  await writeTextArtifact(runDir, artifacts.diff, safeDiff);
+  await writeTextArtifact(runDir, artifacts.diffstat, safeDiffstat);
+  await writeJsonArtifact(runDir, "metadata.json", {
+    source: "record", run_id: runId, command: recordedCommand, lifecycle: result.interrupted ? "interrupted" : result.timedOut ? "timed_out" : "completed",
+    signal: signalName, exit_code: result.exitCode, content_capture: contentCapture,
+    redaction: { enabled: true, custom_patterns: redactions.customCount }, environment,
+    base: { commit_sha: baseCommit, branch: baseBranch },
+    head: { commit_sha: headCommit, branch: headBranch }, context, validation: recordedEvalCommand ? { command: recordedEvalCommand, exit_code: evalResult?.exitCode ?? null } : null
+  });
   await writeJsonArtifact(runDir, "summary.json", summary);
   console.log(`summary: ${runDir}/summary.json`);
+}
+
+function optionalPositiveInteger(args: Record<string, string | boolean>, key: string): number | null {
+  const value = optionalString(args, key);
+  if (!value) return null;
+  const parsed = Number.parseInt(value, 10);
+  if (!Number.isSafeInteger(parsed) || parsed <= 0) throw new Error(`--${key} must be a positive integer`);
+  return parsed;
+}
+
+function redactionPatterns(raw: string | null): { patterns: RegExp[]; customCount: number } {
+  const builtIns = [/gh[pousr]_[A-Za-z0-9_]{20,}/g, /github_pat_[A-Za-z0-9_]{20,}/g, /AKIA[0-9A-Z]{16}/g, /((?:api[_-]?key|token|password|secret)\s*(?:[=:]|\s)\s*)[^\s"']+/gi];
+  const custom = raw ? raw.split(",").map((value) => value.trim()).filter(Boolean) : [];
+  return { patterns: [...builtIns, ...custom.map((value) => new RegExp(escapeRegExp(value), "g"))], customCount: custom.length };
+}
+
+function redactText(value: string, patterns: RegExp[]): string {
+  return patterns.reduce((result, pattern) => result.replace(pattern, "[REDACTED]"), value);
+}
+
+function redactCommand(command: string[], patterns: RegExp[]): string[] {
+  return command.map((part, index) => {
+    if (index > 0 && /^--?(?:api[-_]?key|token|password|secret)$/i.test(command[index - 1])) return "[REDACTED]";
+    return redactText(part, patterns);
+  });
+}
+
+function escapeRegExp(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+interface RecordingContext {
+  executable: string;
+  model: string | null;
+  ci: boolean;
+  branch: string | null;
+  github_repository: string | null;
+  github_ref: string | null;
+  github_issue_or_pr: string | null;
+}
+
+function detectContext(command: string[], branch: string | null, issue: string | null): RecordingContext {
+  const modelIndex = command.findIndex((value) => value === "--model" || value === "-m");
+  const githubRef = process.env.GITHUB_REF ?? null;
+  const pullRequest = githubRef?.match(/pull\/(\d+)/)?.[1] ?? null;
+  return {
+    executable: command[0], model: modelIndex >= 0 ? command[modelIndex + 1] ?? null : null,
+    ci: process.env.CI === "true" || Boolean(process.env.GITHUB_ACTIONS), branch,
+    github_repository: process.env.GITHUB_REPOSITORY ?? null, github_ref: githubRef, github_issue_or_pr: issue ?? pullRequest
+  };
 }
 
 function inferAgent(command: string): AgentName {

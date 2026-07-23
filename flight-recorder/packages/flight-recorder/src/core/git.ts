@@ -5,6 +5,16 @@ export async function currentCommit(repoPath: string): Promise<string | null> {
   return result.exitCode === 0 ? result.stdout.trim() : null;
 }
 
+export async function currentBranch(repoPath: string): Promise<string | null> {
+  const result = await runCommand("git", ["branch", "--show-current"], { cwd: repoPath });
+  return result.exitCode === 0 ? result.stdout.trim() || null : null;
+}
+
+export async function repositoryRoot(repoPath: string): Promise<string | null> {
+  const result = await runCommand("git", ["rev-parse", "--show-toplevel"], { cwd: repoPath });
+  return result.exitCode === 0 ? result.stdout.trim() || null : null;
+}
+
 export async function resetRepo(repoPath: string): Promise<void> {
   await runCommand("git", ["reset", "--hard", "HEAD"], { cwd: repoPath });
   await runCommand("git", ["clean", "-fd"], { cwd: repoPath });

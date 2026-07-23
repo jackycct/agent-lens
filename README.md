@@ -111,6 +111,17 @@ The runner writes artifacts under `runs/<yyyy-mm-dd>/<run_id>/`:
 - `test.log`
 - `metadata.json`
 
+## Record An Existing Agent Session
+
+```bash
+flight-recorder record -- codex "Fix the failing test"
+```
+
+This zero-configuration wrapper writes the same `summary.json` and artifact
+layout as a benchmark run. Content capture is off by default; see the
+[package recording guide](flight-recorder/README.md#zero-configuration-recording)
+for opt-in content capture, redaction, validation, timeouts, and interactive use.
+
 ## Compare Runs
 
 ```bash

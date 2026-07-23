@@ -39,7 +39,7 @@ Usage: flight-recorder <command> [options]
 Commands:
   run      Run a controlled agent benchmark
   run record  Record metadata and telemetry JSONL as benchmark evidence
-  record -- <command>  Record a command without a metadata file
+  record [options] -- <command>  Record a command without a metadata file
   compare  Compare baseline and candidate summary.json files
   report   Generate a Flight Recorder Markdown report from summary.json
 `);
