@@ -26,6 +26,39 @@ Optional controls:
 - `--reset`
 - `--out-dir runs`
 
+## Zero-Configuration Recording
+
+Record a supported agent session without preparing metadata or telemetry files:
+
+```bash
+flight-recorder record -- codex --model gpt-5.5 "Fix the failing test"
+flight-recorder record --agent claude --issue 123 --task "upgrade dependency" -- claude
+```
+
+The wrapper detects the Git repository, captures the base and final commit/branch,
+agent executable, observable model argument, CI and GitHub context, exit status,
+timing, and diff statistics. `summary.json` remains compatible with the benchmark
+and report pipeline; the extra lifecycle evidence is stored in `metadata.json`.
+
+Safe capture is the default: command arguments, output, validation command, and
+diff content are not saved. Use
+`--capture-content` only when those artifacts may be retained, and use
+`--redact value1,value2` to redact additional literal secrets. Built-in redaction
+covers common GitHub tokens, AWS access keys, and `token`/`password`/`secret`
+assignments.
+
+Useful controls:
+
+- `--eval-command "npm test"`: record declared validation evidence.
+- `--timeout-ms 300000`: stop a session after the configured timeout.
+- `--non-interactive`: disable terminal input forwarding.
+- `--repo <path>`, `--out-dir <path>`, `--agent <codex|claude|copilot>`,
+  `--issue <id>`, `--task <description>`, and `--model <name>`: override metadata.
+
+Interrupted, timed-out, crashed, and failed sessions retain a valid artifact
+directory and `summary.json`. The wrapper uses Node process APIs and has automated
+fixtures that run on Windows, macOS, and Linux.
+
 ## Baseline Vs Candidate
 
 ```bash
